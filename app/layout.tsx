@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
+import { ThemeProvider } from "@/components/theme-provider";
+import ToastProvider from "@/components/ui/toastprovider";
+import { StoreProvider } from "@/store/storeprovider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NextJS MongoDB Prisma Starter",
-  description: "NextJS MongoDB Prisma Starter with TypeScript and TailwindCSS",
+  title: "Pablings Sandoval",
+  description: "Schedule your next haircut",
 };
 
 export default function RootLayout({
@@ -15,8 +17,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+    <StoreProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ToastProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </ToastProvider>
+        </body>
+      </html>
+    </StoreProvider>
   );
 }
