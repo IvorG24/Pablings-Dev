@@ -9,27 +9,22 @@ import { Extra } from "@/lib/type"; // Assuming Extra type/interface is defined
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormCard from "../ui/formcard";
 
-const StepExtraServices: React.FC = () => {
+const StepExtraServices = () => {
   const dispatch = useDispatch();
-  const selectedExtra = useSelector(
-    (state: RootState) => state.formSlice.selectedExtra
+  const { selectedExtra, selectedStaff, selectedExtraPrice } = useSelector(
+    (state: RootState) => state.formSlice,
   );
-  const selectedExtraPrice = useSelector(
-    (state: RootState) => state.formSlice.selectedExtraPrice
-  );
-
   const {
-    register,
     setValue,
     formState: { errors },
   } = useFormContext();
 
   useEffect(() => {
     if (selectedExtra.length > 0) {
-      setValue("extraServices", selectedExtra);
+      setValue("extraservices", selectedExtra);
       setValue("price2", selectedExtraPrice);
     } else {
-      setValue("extraServices", []);
+      setValue("extraservices", [""]);
       setValue("price2", 0);
     }
   }, [selectedExtra, selectedExtraPrice, setValue]);
@@ -58,12 +53,6 @@ const StepExtraServices: React.FC = () => {
               price={extra.price}
               time="30mins"
               Avatarsrc="https://github.com/shadcn.png"
-            />
-            <Input
-              type="hidden"
-              value={extra.name} // Set value to the extra name
-              defaultChecked={selectedExtra.includes(extra.name)} // Check if the extra is selected
-              {...register("extraServices")} // Register with React Hook Form
             />
           </div>
         ))}

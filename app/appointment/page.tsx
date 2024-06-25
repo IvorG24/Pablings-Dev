@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -10,10 +10,18 @@ import {
   stepPersonalInfoSchema,
   confirmationSchema,
 } from "@/lib/form-schemas";
-
+import { useOptimistic } from "react";
 import { Button } from "@/components/ui/button";
 import { stepLabels } from "@/lib/data";
 import { useSelection } from "@/lib/handleEvent/stepForm";
+import { AppointmentAction } from "../action/actions";
+import { AppointmentState, AppointmentTable } from "@/lib/type";
+import { RootState, AppDispatch } from "@/store/store";
+import { fetchAppointments, addAppointment } from "@/store/appointmentSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { log } from "console";
+import FormButton from "@/components/FormButton";
+
 const Page = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
@@ -32,12 +40,12 @@ const Page = () => {
     mode: "all",
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     const updatedData = { ...formData, ...data };
     setFormData(updatedData);
 
     if (currentStep === steps.length - 1) {
-      console.log(updatedData);
+      await AppointmentAction(updatedData);
     } else {
       setCurrentStep((prev) => prev + 1);
     }
@@ -49,9 +57,14 @@ const Page = () => {
         {stepLabels.map((label, index) => (
           <div
             key={index}
-            className={`step ${currentStep === index ? "text-yellow-500" : ""}`}
+            className={`step ${
+              currentStep === index ? "text-yellow-500 text-lg" : ""
+            }`}
           >
-            {label}
+            <div className="flex items-center gap-2">
+              {<label.icon className="text-xl" />}
+              {label.label}
+            </div>
           </div>
         ))}
       </section>
@@ -73,9 +86,11 @@ const Page = () => {
                 Back
               </Button>
             )}
-            <Button type="submit">
-              {currentStep === steps.length - 1 ? "Submit" : "Next"}
-            </Button>
+            <FormButton
+              variant="appointment"
+              counter={currentStep}
+              steps={steps}
+            />
           </div>
         </form>
       </FormProvider>

@@ -1,9 +1,10 @@
+"use client";
 import React from "react";
 import { useSelector } from "react-redux";
 import { TbCurrencyPeso } from "react-icons/tb";
 import { RootState } from "@/store/store"; // Adjust path as needed
-import { selectStaff } from "@/store/formSlice";
-
+import { format } from "date-fns";
+import { useFormContext } from "react-hook-form";
 const StepConfirmation = () => {
   const {
     selectedService,
@@ -17,15 +18,20 @@ const StepConfirmation = () => {
     email,
     phone,
   } = useSelector((state: RootState) => state.formSlice); // Assuming 'form' is your slice name in the root state
+  const { setValue } = useFormContext();
 
-  // Calculate total price
+  const formattedDate = format(selectedDate, "EEEE dd MMMM");
   const totalPrice = selectedPrice + selectedExtraPrice;
-
+  setValue("totalprice", totalPrice);
   return (
     <div className="flex gap-5">
       <div className="w-full">
         <div className="flex flex-col gap-2">
           <h1 className="text-2xl font-bold">Appointment Summary</h1>
+          <div className="flex justify-between">
+            <h3 className="text-lg font-semibold"></h3>
+            <p>{formattedDate}</p>
+          </div>
           <div className="flex justify-between">
             <h3 className="text-lg font-semibold">Chosen Date</h3>
             <p>{selectedTime}</p>
@@ -45,7 +51,9 @@ const StepConfirmation = () => {
           {/* Render selected extra services and their prices */}
           {selectedExtra.length > 0 && (
             <div className="flex justify-between">
-              <h3 className="text-lg font-semibold">{selectedExtra}</h3>
+              <h3 className="text-lg font-semibold">
+                {selectedExtra.join(", ")}
+              </h3>
               <p className="flex gap-2 items-center">
                 <TbCurrencyPeso />
                 {selectedExtraPrice}

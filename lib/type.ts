@@ -4,7 +4,7 @@ export type FormState = {
   selectedExtra: string[];
   selectedExtraPrice: number;
   selectedStaff: string;
-  selectedDate: Date | undefined;
+  selectedDate: string;
   selectedTime: string;
   name: string;
   email: string;
@@ -24,6 +24,10 @@ export type Extra = {
   price: number;
 };
 
+export type AppointmentState = {
+  data: AppointmentTable[];
+};
+
 export type Appointment = {
   date: string;
   time: string;
@@ -37,3 +41,23 @@ export interface FormCardProps {
   price?: number;
   description?: string;
 }
+type Status = "Pending" | "Confirmed" | "Cancelled";
+
+export type AppointmentTable = {
+  appointment_id: string;
+  BookingNumber: number;
+  service: string;
+  date: string;
+  time: string;
+  barber: string;
+  extraservices: string[];
+  name: string;
+  phone: string;
+  email: string;
+  totalprice: number;
+  status: Status;
+};
+export type AppointmentResponse = {
+  appointments: AppointmentTable[];
+  total: number;
+};

@@ -1,4 +1,3 @@
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,18 +7,72 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
+enum status {
+  Pending
+  Confirm
+  Declined
+} 
 model User {
-  id            String         @id @default(auto()) @map("_id") @db.ObjectId
-  firstname     String
-  lastname      String
-  email         String         @unique
-  password      String
-  image         String?
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  firstname String
+  lastname  String
+  email     String   @unique
+  password  String
+  image     String?
+  barberId  String?  @db.ObjectId
+  barber    Barber[]
+  products  Product[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("user")
 }
- 
+
+model Barber {
+  barber_id String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  name      String   @unique
+  image     String?
+  email     String?
+  phone     String?
+  slot      Slot[]
+  @@map("barber")
+}
+
+model Slot {
+  slot_id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  barber        Barber     @relation(fields: [barber_name], references: [name])
+  barber_name   String
+  start_time    String
+  end_time      String
+  day_of_week   Int
+  isAvailable   Boolean  @default(true)
+  @@map("slot")
+}
+model Product {
+  product_id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id])
+  product_name  String
+  price         Int
+  description   String?
+  @@map("product")
+}
+model Appointment {
+  appointment_id String   @id @default(auto()) @map("_id") @db.ObjectId
+  BookingNumber Int
+  service       String
+  date          String
+  time          String
+  barber        String
+  extraservices String[]
+  name          String
+  phone         String
+  email         String
+  totalprice    Int
+  status        status  @default(Pending)
+
+  @@map("appointment")
+}
+
 

@@ -1,3 +1,12 @@
+import {
+  TbCircleNumber1Filled,
+  TbCircleNumber2Filled,
+  TbCircleNumber3Filled,
+  TbCircleNumber4Filled,
+  TbCircleNumber5Filled,
+  TbCircleNumber6Filled,
+} from "react-icons/tb";
+
 export const services = {
   Regular: [
     {
@@ -43,14 +52,6 @@ export const services = {
     },
   ],
 };
-export const stepLabels = [
-  "Services",
-  "Extra Services",
-  "Staff",
-  "Date and Time",
-  "Personal Information",
-  "Confirmation",
-];
 export const extras = [
   {
     name: "Highlights",
@@ -148,6 +149,32 @@ export const extras = [
   },
 ];
 
+export const stepLabels = [
+  {
+    label: "Services",
+    icon: TbCircleNumber1Filled,
+  },
+  {
+    label: "Extra Services",
+    icon: TbCircleNumber2Filled,
+  },
+  {
+    label: "Staff",
+    icon: TbCircleNumber3Filled,
+  },
+  {
+    label: "Date and Time",
+    icon: TbCircleNumber4Filled,
+  },
+  {
+    label: "Personal Information",
+    icon: TbCircleNumber5Filled,
+  },
+  {
+    label: "Confirmation",
+    icon: TbCircleNumber6Filled,
+  },
+];
 export const barbers = [
   {
     barber_id: 1,

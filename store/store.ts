@@ -1,9 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import drawerReducer from "./slide";
 import formReducaer from "./formSlice";
+import currentStepReducer from "./currentStepSlice";
+import appointmentReducer from "./appointmentSlice";
 export const store = configureStore({
   reducer: {
     formSlice: formReducaer,
+    currentStep: currentStepReducer,
+    appointment: appointmentReducer,
   },
 });
 

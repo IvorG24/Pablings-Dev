@@ -31,7 +31,7 @@ Chart.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
 
 // Yearly data

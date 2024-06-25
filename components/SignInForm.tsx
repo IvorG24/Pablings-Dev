@@ -66,7 +66,7 @@ const SignInForm = () => {
               </FormItem>
             )}
           />
-          <FormButton />
+          <FormButton variant="login" />
         </form>
       </Form>
     </section>

@@ -16,7 +16,7 @@ export const generateBarberSchedule = (staffName: string): string[] => {
       timeSlots.push(
         `${i.toString().padStart(2, "0")}:${(j * 30)
           .toString()
-          .padStart(2, "0")}`
+          .padStart(2, "0")}`,
       );
     }
   }

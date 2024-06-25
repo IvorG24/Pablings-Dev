@@ -23,11 +23,11 @@ export const stepServiceSchema = z.object({
 });
 
 export const stepExtraServicesSchema = z.object({
-  extraServices: z.array(z.string()).optional(),
+  extraservices: z.array(z.string()).optional(),
 });
 
 export const stepStaffSchema = z.object({
-  staff: z.string().min(1, "Select a barber"),
+  barber: z.string().min(1, "Select a barber"),
 });
 
 export const stepDateTimeSchema = z.object({
@@ -42,10 +42,6 @@ export const stepPersonalInfoSchema = z.object({
 });
 
 export const confirmationSchema = z.object({
-  confirm: z
-    .boolean()
-    .default(false)
-    .refine((val) => val === false),
   totalprice: z.number(),
 });
 export const combinedSchema = stepServiceSchema
@@ -54,3 +50,5 @@ export const combinedSchema = stepServiceSchema
   .merge(stepDateTimeSchema)
   .merge(stepPersonalInfoSchema)
   .merge(confirmationSchema);
+
+export type AppointmentValues = z.infer<typeof combinedSchema>;

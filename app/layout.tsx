@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import ToastProvider from "@/components/ui/toastprovider";
 import { StoreProvider } from "@/store/storeprovider";
+import ReactQueryProvider from "@/components/query-provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              {children}
+              <ReactQueryProvider>{children}</ReactQueryProvider>
             </ThemeProvider>
           </ToastProvider>
         </body>

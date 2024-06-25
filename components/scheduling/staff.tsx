@@ -12,18 +12,17 @@ import { selectStaff } from "@/store/formSlice"; // Adjust path as needed
 const StepStaff = () => {
   const dispatch = useDispatch();
   const selectedStaff = useSelector(
-    (state: RootState) => state.formSlice.selectedStaff
+    (state: RootState) => state.formSlice.selectedStaff,
   );
 
   const {
-    register,
     setValue,
     formState: { errors },
   } = useFormContext();
 
   useEffect(() => {
     if (selectedStaff) {
-      setValue("staff", selectedStaff);
+      setValue("barber", selectedStaff);
     }
   }, [selectedStaff, setValue]);
 
@@ -49,11 +48,6 @@ const StepStaff = () => {
               name={staffName.name}
               description="Expert barber"
               Avatarsrc="https://github.com/shadcn.png"
-            />
-            <Input
-              type="hidden"
-              defaultValue={selectedStaff}
-              {...register("staff")}
             />
           </div>
         ))}

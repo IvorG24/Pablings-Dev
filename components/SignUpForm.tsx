@@ -96,7 +96,7 @@ const SignUpForm = () => {
               </FormItem>
             )}
           />
-          <FormButton />
+          <FormButton variant="signup" />
         </form>
       </Form>
     </section>

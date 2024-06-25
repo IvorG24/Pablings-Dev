@@ -1,3 +1,4 @@
+"use client";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormContext } from "react-hook-form";
@@ -9,22 +10,18 @@ import { selectDateTime } from "@/store/formSlice";
 import { RootState } from "@/store/store";
 import { Button } from "../ui/button";
 
-const StepDateTime: React.FC = () => {
+const StepDateTime = () => {
   const dispatch = useDispatch();
   const {
     register,
     setValue,
-    getValues,
+
     formState: { errors },
   } = useFormContext();
 
-  const selectedDate = useSelector(
-    (state: RootState) => state.formSlice.selectedDate
-  );
-  const selectedTime = useSelector(
-    (state: RootState) => state.formSlice.selectedTime
-  );
-  const selectedBarber = getValues("staff") as string;
+  const { selectedStaff, selectedDate, selectedTime } = useSelector(
+    (state: RootState) => state.formSlice,
+  ); // Assuming 'form' is your slice name in the root state
 
   const formattedDayOfWeek = selectedDate ? format(selectedDate, "i") : "";
   const dayOfWeekNumber = formattedDayOfWeek
@@ -33,26 +30,24 @@ const StepDateTime: React.FC = () => {
 
   const filteredSlots = availabilitySlots.filter(
     (slot) =>
-      slot.barber_name === selectedBarber &&
-      slot.day_of_week === dayOfWeekNumber
+      slot.barber_name === selectedStaff &&
+      slot.day_of_week === dayOfWeekNumber,
   );
 
   useEffect(() => {
     if (selectedDate && selectedTime) {
-      const formattedDate = format(selectedDate, "yyyy-MM-dd");
+      const formattedDate = format(new Date(selectedDate), "MM/dd/yyyy");
       dispatch(selectDateTime({ date: selectedDate, time: selectedTime }));
     }
   }, [dispatch, selectedDate, selectedTime]);
 
-  const handleDateSelect = (date: Date | undefined) => {
+  const handleDateSelect = (date: string | null) => {
     if (date) {
       const formattedDate = format(date, "yyyy-MM-dd");
       setValue("date", formattedDate); // Update form state
-
-      dispatch(selectDateTime({ date: date, time: selectedTime }));
+      dispatch(selectDateTime({ date: formattedDate, time: selectedTime }));
     }
   };
-
   const handleTimeSelect = (selectedTime: string) => {
     setValue("time", selectedTime);
     if (selectedDate) {
@@ -74,7 +69,7 @@ const StepDateTime: React.FC = () => {
           !availabilitySlots.some(
             (slot) =>
               slot.day_of_week === date.getDay() &&
-              slot.barber_name === selectedBarber
+              slot.barber_name === selectedStaff,
           )
         }
         {...register("date")}
@@ -90,11 +85,6 @@ const StepDateTime: React.FC = () => {
             }
           >
             {slot.start_time} - {slot.end_time}
-            <Input
-              type="hidden"
-              defaultValue={`${slot.start_time} - ${slot.end_time}`}
-              {...register("time")}
-            />
           </Button>
         ))}
       </div>

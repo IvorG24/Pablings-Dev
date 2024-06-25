@@ -12,13 +12,12 @@ import FormCard from "../ui/formcard";
 const StepService = () => {
   const dispatch = useDispatch();
   const selectedService = useSelector(
-    (state: RootState) => state.formSlice.selectedService
+    (state: RootState) => state.formSlice.selectedService,
   );
   const selectedPrice = useSelector(
-    (state: RootState) => state.formSlice.selectedPrice
+    (state: RootState) => state.formSlice.selectedPrice,
   );
   const {
-    register,
     setValue,
     formState: { errors },
   } = useFormContext();
@@ -59,11 +58,6 @@ const StepService = () => {
               time="30mins"
               Avatarsrc="https://github.com/shadcn.png"
             />
-            <Input
-              type="hidden"
-              defaultValue={selectedService}
-              {...register("service")}
-            />
           </div>
         ))}
 
@@ -86,13 +80,8 @@ const StepService = () => {
                 time="30mins"
                 Avatarsrc="https://github.com/shadcn.png"
               />
-              <Input
-                type="hidden"
-                defaultValue={selectedService}
-                {...register("service")}
-              />
             </div>
-          )
+          ),
         )}
       </section>
     </ScrollArea>
