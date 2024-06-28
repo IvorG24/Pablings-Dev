@@ -6,14 +6,16 @@ import {
 } from "next/dist/client/components/redirect";
 import { TabsContent } from "@/components/ui/tabs";
 import { SubmitButton } from "@/components/SubmitButton";
-import AppointmentList from "./modules/appointmentList";
+import AppointmentList from "./modules/appointment/appointmentList";
+import RecordList from "./modules/record/recordlist";
+import BarberList from "./modules/barbers/barbertlist";
 
 const DashboardPage = async () => {
   const tabContents = [
     { value: "overview", component: <SalesOverview /> },
     { value: "appointment", component: <AppointmentList /> },
-    { value: "records", component: <AppointmentList /> },
-    { value: "barber", component: <AppointmentList /> },
+    { value: "records", component: <RecordList /> },
+    { value: "barber", component: <BarberList /> },
     { value: "walkin", component: <AppointmentList /> },
   ];
 

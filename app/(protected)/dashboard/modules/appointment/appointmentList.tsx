@@ -1,7 +1,6 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AppointmentTable from "@/app/(protected)/dashboard/modules/appointmentTable";
-import prisma from "@/lib/prisma";
+import AppointmentTable from "./appointmentTable";
 
 const AppointmentList = async () => {
   const tabContents = [

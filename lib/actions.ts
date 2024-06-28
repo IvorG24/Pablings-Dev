@@ -37,7 +37,6 @@ export const signUpAction = async (signUpValues: SignUpValues) => {
   } catch (error) {
     console.log("ERROR OCCURED SIGNUP ACTION", error);
     if (error instanceof PrismaClientKnownRequestError) {
-      console.log(error.code);
       switch (error.code) {
         case "P2002":
           return { error: "Email already exists" };

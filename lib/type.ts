@@ -1,3 +1,4 @@
+import { Appointment, Sales } from "@prisma/client";
 export type FormState = {
   selectedService: string;
   selectedPrice: number;
@@ -25,10 +26,10 @@ export type Extra = {
 };
 
 export type AppointmentState = {
-  data: AppointmentTable[];
+  data: Appointment[];
 };
 
-export type Appointment = {
+export type AppointmentTime = {
   date: string;
   time: string;
 };
@@ -41,23 +42,15 @@ export interface FormCardProps {
   price?: number;
   description?: string;
 }
-type Status = "Pending" | "Confirmed" | "Cancelled";
 
-export type AppointmentTable = {
-  appointment_id: string;
-  BookingNumber: number;
-  service: string;
-  date: string;
-  time: string;
-  barber: string;
-  extraservices: string[];
-  name: string;
-  phone: string;
-  email: string;
-  totalprice: number;
-  status: Status;
-};
 export type AppointmentResponse = {
-  appointments: AppointmentTable[];
+  pendingAppointments: Appointment[];
+  confirmedAppointments: Appointment[];
+  declinedAppointments: Appointment[];
   total: number;
+};
+
+export type RecordResponse = {
+  total: number;
+  records: Sales[];
 };

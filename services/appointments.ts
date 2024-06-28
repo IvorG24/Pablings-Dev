@@ -1,17 +1,34 @@
-import prisma from "@/lib/prisma";
 import { AppointmentResponse } from "@/lib/type";
+import { status as Status } from "@prisma/client";
 
 export async function fetchAppointmentsList(
-  take = 20,
-  skip = 0
+  take = 15,
+  skip = 0,
+  status: Status = Status.Pending, // Default status is Pending
 ): Promise<AppointmentResponse> {
   try {
-    const response = await fetch(`/api/appointments?take=${take}&skip=${skip}`);
+    const response = await fetch(
+      `/api/appointments?take=${take}&skip=${skip}&status=${status}`,
+    );
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.error || "Failed to fetch appointments");
     }
-    return await response.json();
+    const data: AppointmentResponse = await response.json();
+
+    // Initialize count property to 0 for each appointment if not already set
+    const initializeCount = (appointments: any[]) =>
+      appointments.map((appointment) => ({
+        ...appointment,
+        count: appointment.count || 0,
+      }));
+
+    return {
+      ...data,
+      pendingAppointments: initializeCount(data.pendingAppointments),
+      confirmedAppointments: initializeCount(data.confirmedAppointments),
+      declinedAppointments: initializeCount(data.declinedAppointments),
+    };
   } catch (error) {
     console.error("Error fetching appointments:", error);
     throw error;

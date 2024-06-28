@@ -49,6 +49,7 @@ model Slot {
   isAvailable   Boolean  @default(true)
   @@map("slot")
 }
+
 model Product {
   product_id    String   @id @default(auto()) @map("_id") @db.ObjectId
   userId        String   @db.ObjectId
@@ -71,8 +72,20 @@ model Appointment {
   email         String
   totalprice    Int
   status        status  @default(Pending)
-
   @@map("appointment")
 }
+
+model Sales {
+  sales_id       String   @id @default(auto()) @map("_id") @db.ObjectId 
+  staff          String  
+  service        String   
+  extraservices  String[]
+  staffsales     Int
+  ownersales     Int
+  totalsales     Int
+  trasactiondate String
+  @@map("sales")
+}
+
 
 

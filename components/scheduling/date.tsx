@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormContext } from "react-hook-form";

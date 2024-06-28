@@ -1,56 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  stepServiceSchema,
-  stepExtraServicesSchema,
-  stepStaffSchema,
-  stepDateTimeSchema,
-  stepPersonalInfoSchema,
-  confirmationSchema,
-} from "@/lib/form-schemas";
-import { useOptimistic } from "react";
+import React from "react";
+import { FormProvider } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { stepLabels } from "@/lib/data";
-import { useSelection } from "@/lib/handleEvent/stepForm";
-import { AppointmentAction } from "../action/actions";
-import { AppointmentState, AppointmentTable } from "@/lib/type";
-import { RootState, AppDispatch } from "@/store/store";
-import { fetchAppointments, addAppointment } from "@/store/appointmentSlice";
-import { useSelector, useDispatch } from "react-redux";
-import { log } from "console";
 import FormButton from "@/components/FormButton";
+import useScheduleForm from "@/hooks/useScheduleForm";
 
-const Page = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [formData, setFormData] = useState({});
-  const { steps } = useSelection();
-  const methods = useForm({
-    resolver: zodResolver(
-      [
-        stepServiceSchema,
-        stepExtraServicesSchema,
-        stepStaffSchema,
-        stepDateTimeSchema,
-        stepPersonalInfoSchema,
-        confirmationSchema,
-      ][currentStep]
-    ),
-    mode: "all",
-  });
-
-  const onSubmit = async (data: any) => {
-    const updatedData = { ...formData, ...data };
-    setFormData(updatedData);
-
-    if (currentStep === steps.length - 1) {
-      await AppointmentAction(updatedData);
-    } else {
-      setCurrentStep((prev) => prev + 1);
-    }
-  };
-
+const page = () => {
+  const { currentStep, methods, onSubmit, steps, setCurrentStep } =
+    useScheduleForm();
   return (
     <main className="p-10 min-h-[800px] h-full w-full flex gap-x-10">
       <section className="step-indicator mb-5 pr-4 border-r-2 space-y-6">
@@ -98,4 +56,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default page;

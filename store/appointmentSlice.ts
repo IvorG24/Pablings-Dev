@@ -1,61 +1,38 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { PrismaClient } from "@prisma/client";
-import { AppointmentTable } from "@/lib/type";
-const prisma = new PrismaClient();
+// appointmentSlice.ts
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type Status = "Pending" | "Confirmed" | "Cancelled";
-
-interface AppointmentsState {
-  appointments: AppointmentTable[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: AppointmentsState = {
-  appointments: [],
-  loading: false,
-  error: null,
+type ScheduleForm = {
+  appointment_id: string;
+  BookingNumber: number;
+  service: string;
+  date: string;
+  time: string;
+  barber: string;
+  extraservices: string[];
+  name: string;
+  phone: string;
+  email: string;
+  totalprice: number;
+  status: string;
 };
 
-export const fetchAppointments = createAsyncThunk<AppointmentTable[]>(
-  "appointments/fetchAppointments",
-  async () => {
-    const response = await fetch("/api/appointments");
-    if (!response.ok) {
-      throw new Error("Failed to fetch appointments");
-    }
-    const data: AppointmentTable[] = await response.json();
-    return data;
-  },
-);
+interface AppointmentState {
+  appointments: ScheduleForm[];
+}
+
+const initialState: AppointmentState = {
+  appointments: [],
+};
+
 const appointmentSlice = createSlice({
-  name: "appointments",
+  name: "appointment",
   initialState,
   reducers: {
-    addAppointment(state, action: PayloadAction<AppointmentTable>) {
-      state.appointments.push(action.payload);
+    addAppointments: (state, action: PayloadAction<ScheduleForm[]>) => {
+      state.appointments.push(...action.payload); // Ensure state mutation is avoided
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchAppointments.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        fetchAppointments.fulfilled,
-        (state, action: PayloadAction<AppointmentTable[]>) => {
-          state.loading = false;
-          state.appointments = action.payload;
-        },
-      )
-      .addCase(fetchAppointments.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message || "Failed to fetch appointments";
-      });
+    // Other reducers like updateAppointment, removeAppointment, etc.
   },
 });
-
-export const { addAppointment } = appointmentSlice.actions;
-
+export const { addAppointments } = appointmentSlice.actions;
 export default appointmentSlice.reducer;

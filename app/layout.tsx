@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ToastProvider from "@/components/ui/toastprovider";
 import { StoreProvider } from "@/store/storeprovider";
 import ReactQueryProvider from "@/components/query-provider";
+import { SessionProvider } from "next-auth/react";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
