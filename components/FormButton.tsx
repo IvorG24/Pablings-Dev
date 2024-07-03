@@ -3,7 +3,7 @@ import { useFormContext } from "react-hook-form";
 import { Button } from "./ui/button";
 
 interface FormButtonProps {
-  variant: "login" | "signup" | "appointment";
+  variant?: "login" | "signup" | "appointment";
   counter?: number;
   steps?: React.ReactNode;
 }
@@ -28,7 +28,11 @@ const FormButton = ({ variant, counter, steps }: FormButtonProps) => {
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : buttonText}
         </Button>
-      ) : null}
+      ) : (
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Creating..." : buttonText}
+        </Button>
+      )}
     </>
   );
 };

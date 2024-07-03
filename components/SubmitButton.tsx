@@ -2,6 +2,8 @@
 
 import { useFormStatus } from "react-dom";
 import { type ComponentProps } from "react";
+import { Button } from "./ui/button";
+import LoadingSpinner from "./ui/spinner";
 
 type Props = ComponentProps<"button"> & {
   pendingText: string;
@@ -11,8 +13,15 @@ export function SubmitButton({ children, pendingText, ...props }: Props) {
   const { pending } = useFormStatus();
 
   return (
-    <button {...props} type="submit" aria-disabled={pending}>
-      {pending ? pendingText : children}
-    </button>
+    <Button {...props} type="submit" disabled={pending}>
+      {pending ? (
+        <p className="flex items-center gap-2">
+          <LoadingSpinner />
+          {pendingText}
+        </p>
+      ) : (
+        children
+      )}
+    </Button>
   );
 }

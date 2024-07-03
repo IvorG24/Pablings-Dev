@@ -28,6 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useRecordData from "@/hooks/useRecordData";
+import AddVoucher from "./addVoucher";
 
 const RecordTable = () => {
   const {
@@ -61,6 +62,8 @@ const RecordTable = () => {
           <TableRow>
             <TableHead className="w-[100px]">Sales ID</TableHead>
             <TableHead>Barber</TableHead>
+            <TableHead>Customer Name</TableHead>
+            <TableHead>Customer Email</TableHead>
             <TableHead>Service</TableHead>
             <TableHead>Extra Service</TableHead>
             <TableHead>Barber Sales</TableHead>
@@ -74,9 +77,14 @@ const RecordTable = () => {
           {filteredData.map((table) => (
             <TableRow key={table.sales_id}>
               <TableCell className="font-medium">
-                SLS {table.sales_id.substring(table.sales_id.length - 3)}
+                SLS{" "}
+                {table.sales_id
+                  .substring(table.sales_id.length - 3)
+                  .toUpperCase()}
               </TableCell>
               <TableCell>{table.staff}</TableCell>
+              <TableCell>{table.customer_name}</TableCell>
+              <TableCell>{table.customer_email}</TableCell>
               <TableCell>{table.service}</TableCell>
               <TableCell>
                 {table.extraservices && table.extraservices.length > 0
@@ -93,8 +101,8 @@ const RecordTable = () => {
                   <DropdownMenuContent>
                     <DropdownMenuLabel>My Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => {}}>
-                      Approve
+                    <DropdownMenuItem>
+                      <AddVoucher />
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

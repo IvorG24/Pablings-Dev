@@ -1,4 +1,3 @@
-import { useState } from "react";
 import StepService from "@/components/scheduling/services";
 import StepExtraServices from "@/components/scheduling/extras";
 import StepStaff from "@/components/scheduling/staff";

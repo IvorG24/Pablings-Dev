@@ -18,10 +18,10 @@ model User {
   lastname  String
   email     String   @unique
   password  String
-  image     String?
   barberId  String?  @db.ObjectId
   barber    Barber[]
   products  Product[]
+  sales     Sales[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   @@map("user")
@@ -41,11 +41,10 @@ model Barber {
 
 model Slot {
   slot_id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  barber        Barber     @relation(fields: [barber_name], references: [name])
+  barber        Barber   @relation(fields: [barber_name], references: [name])
   barber_name   String
-  start_time    String
-  end_time      String
-  day_of_week   Int
+  time_slot     String
+  day_of_week   String
   isAvailable   Boolean  @default(true)
   @@map("slot")
 }
@@ -76,14 +75,18 @@ model Appointment {
 }
 
 model Sales {
-  sales_id       String   @id @default(auto()) @map("_id") @db.ObjectId 
-  staff          String  
-  service        String   
-  extraservices  String[]
-  staffsales     Int
-  ownersales     Int
-  totalsales     Int
-  trasactiondate String
+  sales_id        String   @id @default(auto()) @map("_id") @db.ObjectId 
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id])
+  staff           String  
+  customer_name   String?
+  customer_email  String?
+  service         String   
+  extraservices   String[]
+  staffsales      Int
+  ownersales      Int
+  totalsales      Int
+  trasactiondate  String
   @@map("sales")
 }
 

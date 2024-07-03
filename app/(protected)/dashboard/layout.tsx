@@ -15,7 +15,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <>
       <Tabs defaultValue="overview" className="min-h-screen mx-10 my-5 ">
-        <Header />
         {children}
       </Tabs>
     </>

@@ -20,11 +20,41 @@ export type Service = {
 };
 
 export type Extra = {
-  name: string;
+  label: string;
+  value: string;
   description: string;
   price: number;
 };
 
+export type SalesOverviewData = {
+  todaysalesAmount: number;
+  todaycustomer: number;
+  totalsalesAmount: number;
+  totalcustomer: number;
+  yearlySales: number[];
+  todaycustomerlist: {
+    customer_name: string | null;
+    staff: string;
+    service: string;
+    extraservices: string[];
+  }[];
+};
+
+type weekly = {
+  weeklyLabel: string;
+  totalSales: number;
+};
+type dougnut = {
+  _count: {
+    staff: number;
+  };
+  staff: string;
+};
+export type ChartSalesData = {
+  monthlySales: number[];
+  weeklySalesData: weekly[];
+  doughnutData: dougnut[];
+};
 export type AppointmentState = {
   data: Appointment[];
 };
@@ -53,4 +83,11 @@ export type AppointmentResponse = {
 export type RecordResponse = {
   total: number;
   records: Sales[];
+};
+
+export type AddScheduleProps = {
+  barberImage: string | null;
+  barberName: string;
+  barberEmail: string | null;
+  barberPhone: string | null;
 };

@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from "react-toastify";
+import { toast } from "./ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { signInSchema } from "@/lib/form-schemas";
 import { useForm } from "react-hook-form";
@@ -27,10 +27,17 @@ const SignInForm = () => {
 
   async function onSubmit(values: SignInValues) {
     try {
+      const user = values.email;
       await signInAction(values);
-      toast.success("Welcome to dashboard");
+      toast({
+        title: `Welcome to dashboard ${user} `,
+        description: `Feel free to use the dashboard`,
+      });
     } catch (error) {
-      toast.error(`"error login"`);
+      toast({
+        title: `Something went wrong `,
+        description: `${error}`,
+      });
     }
   }
   return (

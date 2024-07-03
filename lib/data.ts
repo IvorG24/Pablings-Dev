@@ -1,3 +1,4 @@
+import { values } from "lodash";
 import {
   TbCircleNumber1Filled,
   TbCircleNumber2Filled,
@@ -6,8 +7,18 @@ import {
   TbCircleNumber5Filled,
   TbCircleNumber6Filled,
 } from "react-icons/tb";
+interface Service {
+  name: string;
+  price: number;
+  description: string;
+}
 
-export const services = {
+interface Services {
+  [key: string]: Service[];
+  Regular: Service[];
+  "General Pablo Services": Service[];
+}
+export const services: Services = {
   Regular: [
     {
       name: "Tabas Pablings",
@@ -54,95 +65,113 @@ export const services = {
 };
 export const extras = [
   {
-    name: "Highlights",
+    label: "Highlights",
+    value: "Highlights",
     price: 2500,
     description: "Hair highlighting service. Starting price based on image.",
   },
   {
-    name: "Bleach",
+    label: "Bleach",
+    value: "Bleach",
     price: 1500,
     description: "Hair bleaching service. Starting price based on image.",
   },
   {
-    name: "Color",
+    label: "Color",
+    value: "Color",
     price: 2500,
     description: "Hair coloring service. Starting price based on image.",
   },
   {
-    name: "Perm for Men",
+    label: "Perm for Men",
+    value: "Perm for Men",
     price: 2500,
     description: "Perming service for men. Starting price based on image.",
   },
   {
-    name: "Beard Sculpt/Shave",
+    label: "Beard Sculpt/Shave",
+    value: "Beard Sculpt/Shave",
     price: 299,
     description: "Beard sculpting or traditional straight razor shave service.",
   },
   {
-    name: "Charcoal Mask",
+    label: "Charcoal Mask",
+    value: "Charcoal Mask",
     price: 499,
     description: "Charcoal facial mask treatment.",
   },
   {
-    name: "Anti-Dandruff",
+    label: "Anti-Dandruff",
+    value: "Anti-Dandruff",
     price: 899,
     description: "Anti-dandruff treatment.",
   },
   {
-    name: "Hair Dye Starts",
+    label: "Hair Dye Starts",
+    value: "Hair Dye Starts",
     price: 1099,
     description: "Hair dye service. Starting price based on image.",
   },
   {
-    name: "Hair Art Starts",
+    label: "Hair Art Starts",
+    value: "Hair Art Starts",
     price: 359,
     description: "Hair art service. Starting price based on image.",
   },
 
   {
-    name: "Half Body Massage",
+    label: "Half Body Massage",
+    value: "Half Body Massage",
     price: 299,
     description: "Half body massage service.",
   },
   {
-    name: "Simple Hair Art",
+    label: "Simple Hair Art",
+    value: "Simple Hair Art",
     price: 100,
     description: "A simpler version of the hair art service.",
   },
   {
-    name: "Eyebrow",
+    label: "Eyebrow",
+    value: "Eyebrow",
     price: 100,
     description: "Eyebrow grooming service.",
   },
   {
-    name: "L'Oreal Real Treat",
+    label: "L'Oreal Real Treat",
+    value: "L'Oreal Real Treat",
     price: 1999,
     description: "Likely a specific L'Oreal hair treatment product.",
   },
   {
-    name: "L'Oreal Treatment",
+    label: "L'Oreal Treatment",
+    value: "L'Oreal Treatment",
     price: 1299,
     description: "Likely a different L'Oreal hair treatment product.",
   },
   {
-    name: "Grooming",
+    label: "Grooming",
+    value: "Grooming",
     price: 150,
     description:
       "Unclear description in image. Potentially a men's grooming service.",
   },
   {
-    name: "Blow Dry w/ Shampoo",
+    label: "Blow Dry w/ Shampoo",
+    value: "Blow Dry w/ Shampoo",
     price: 200,
     description: "Hair blow dry service with shampoo.",
   },
   {
-    name: "Women Highlights",
+    label: "Women Highlights",
+    value: "Women Highlights",
     price: 2500,
     description:
       "Hair highlighting service for women. Starting price based on image.",
   },
   {
-    name: "Perm Women Starts O",
+    label: "Perm Women Starts O",
+    value: "Perm Women Starts O",
     price: 4000,
     description:
       "Perming service for women. Starting price based on image. Text cut off in image.",
@@ -278,4 +307,14 @@ export const availabilitySlots = [
     is_available: true,
   },
   // Add more availability slots as needed
+];
+
+export const daysOfWeek = [
+  { value: 1, label: "Monday" },
+  { value: 2, label: "Tuesday" },
+  { value: 3, label: "Wednesday" },
+  { value: 4, label: "Thursday" },
+  { value: 5, label: "Friday" },
+  { value: 6, label: "Saturday" },
+  { value: 7, label: "Sunday" },
 ];

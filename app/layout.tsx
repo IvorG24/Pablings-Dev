@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ToastProvider from "@/components/ui/toastprovider";
 import { StoreProvider } from "@/store/storeprovider";
 import ReactQueryProvider from "@/components/query-provider";
-import { SessionProvider } from "next-auth/react";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,16 +23,15 @@ export default function RootLayout({
     <StoreProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <ToastProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="dark"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <ReactQueryProvider>{children}</ReactQueryProvider>
-            </ThemeProvider>
-          </ToastProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ReactQueryProvider>{children}</ReactQueryProvider>
+            <Toaster />
+          </ThemeProvider>
         </body>
       </html>
     </StoreProvider>

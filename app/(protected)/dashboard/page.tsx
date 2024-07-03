@@ -1,48 +1,22 @@
-import { signOut } from "@/auth";
-import SalesOverview from "@/components/dashboard/overview";
-import {
-  isRedirectError,
-  redirect,
-} from "next/dist/client/components/redirect";
+import SalesOverview from "./modules/overview/overview";
 import { TabsContent } from "@/components/ui/tabs";
-import { SubmitButton } from "@/components/SubmitButton";
 import AppointmentList from "./modules/appointment/appointmentList";
 import RecordList from "./modules/record/recordlist";
 import BarberList from "./modules/barbers/barbertlist";
-
+import Header from "@/components/dashboard/header";
+import AdditionalList from "./modules/additionals/additionallist";
 const DashboardPage = async () => {
   const tabContents = [
     { value: "overview", component: <SalesOverview /> },
     { value: "appointment", component: <AppointmentList /> },
     { value: "records", component: <RecordList /> },
     { value: "barber", component: <BarberList /> },
-    { value: "walkin", component: <AppointmentList /> },
+    { value: "walkin", component: <AdditionalList /> },
   ];
 
   return (
     <>
-      <form
-        action={async () => {
-          "use server";
-          try {
-            await signOut({ redirect: false });
-          } catch (err) {
-            if (isRedirectError(err)) {
-              console.error(err);
-              throw err;
-            }
-          } finally {
-            redirect("/");
-          }
-        }}
-      >
-        <SubmitButton
-          pendingText="Signing out..."
-          className="p-2 px-4 mt-4 bg-[hsl(191,52%,30%)] hover:bg-[hsl(191,52%,35%)] rounded-sm"
-        >
-          Sign Out
-        </SubmitButton>
-      </form>
+      <Header />
       {tabContents.map((tab) => (
         <TabsContent
           key={tab.value}

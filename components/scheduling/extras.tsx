@@ -12,7 +12,7 @@ import FormCard from "../ui/formcard";
 const StepExtraServices = () => {
   const dispatch = useDispatch();
   const { selectedExtra, selectedStaff, selectedExtraPrice } = useSelector(
-    (state: RootState) => state.formSlice,
+    (state: RootState) => state.formSlice
   );
   const {
     setValue,
@@ -41,14 +41,14 @@ const StepExtraServices = () => {
           <div
             key={index}
             className={`w-full border rounded-lg h-28 p-4 ${
-              selectedExtra.includes(extra.name)
+              selectedExtra.includes(extra.label)
                 ? "border-yellow-500 bg-stone-800"
                 : ""
             }`}
-            onClick={() => handleExtraSelect(extra.name, extra.price)}
+            onClick={() => handleExtraSelect(extra.label, extra.price)}
           >
             <FormCard
-              name={extra.name}
+              name={extra.label}
               description={extra.description}
               price={extra.price}
               time="30mins"

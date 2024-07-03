@@ -10,18 +10,18 @@ import { redirect } from "next/navigation";
 export const signInAction = async (signInValues: SignInValues) => {
   try {
     await signIn("credentials", signInValues);
+    redirect("/dashboard");
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
-          return { error: "Invalid Credentials" };
+          throw new Error("Invalid Credentials");
         default:
-          return { error: "An error occurred" };
+          throw new Error("something went wrong");
       }
     }
     throw error;
   }
-  redirect("/dashboard");
 };
 
 export const signUpAction = async (signUpValues: SignUpValues) => {
@@ -39,9 +39,9 @@ export const signUpAction = async (signUpValues: SignUpValues) => {
     if (error instanceof PrismaClientKnownRequestError) {
       switch (error.code) {
         case "P2002":
-          return { error: "Email already exists" };
+          throw new Error("Email already exist");
         default:
-          return { error: "An error occurred" };
+          throw new Error("An error occured");
       }
     }
     return { error: "An error occurred" };

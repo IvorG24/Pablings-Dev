@@ -1,36 +1,61 @@
 import type { NextAuthConfig } from "next-auth";
-import { signInSchema } from "./lib/form-schemas";
-import { compare } from "bcryptjs";
 import Credentials from "next-auth/providers/credentials";
+import { compare } from "bcryptjs";
 import prisma from "./lib/prisma";
+import { signInSchema } from "./lib/form-schemas";
 
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
   providers: [
     Credentials({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
-        // Validate the fields
         const validatedFields = signInSchema.safeParse(credentials);
         if (!validatedFields.success) {
-          return null;
+          throw new Error(`${validatedFields.error}`);
         }
 
-        // Validate that the user exists
         const { email, password } = validatedFields.data;
+
         const user = await prisma.user.findUnique({
           where: { email },
         });
         if (!user) {
-          return null;
+          throw new Error("User not found");
         }
 
-        // Check the password
         const isPasswordMatch = await compare(password, user.password);
         if (!isPasswordMatch) {
+          console.error("Password mismatch for user:", email);
           return null;
         }
 
-        return user;
+        const { password: _, ...userWithoutPassword } = user;
+        return userWithoutPassword;
       },
     }),
   ],
-} satisfies NextAuthConfig;
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
+        session.accessToken = token.accessToken as string; // Ensure accessToken is available
+      }
+      return session;
+    },
+  },
+  session: {
+    strategy: "jwt",
+  },
+};
