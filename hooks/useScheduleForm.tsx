@@ -27,7 +27,7 @@ const useScheduleForm = () => {
         stepDateTimeSchema,
         stepPersonalInfoSchema,
         confirmationSchema,
-      ][currentStep]
+      ][currentStep],
     ),
     mode: "all",
   });

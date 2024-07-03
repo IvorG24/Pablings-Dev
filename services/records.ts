@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 export async function fetchRecordsList(
   take: number = 15,
   skip: number = 0,
-  searchFilter: string = ""
+  searchFilter: string = "",
 ): Promise<RecordResponse> {
   try {
     const session = await getSession();

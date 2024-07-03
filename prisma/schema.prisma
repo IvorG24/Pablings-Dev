@@ -80,6 +80,7 @@ model Sales {
   user            User     @relation(fields: [userId], references: [id])
   staff           String  
   customer_name   String?
+  time_slot       String?
   customer_email  String?
   service         String   
   extraservices   String[]

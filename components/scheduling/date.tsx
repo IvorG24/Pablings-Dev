@@ -19,7 +19,7 @@ const StepDateTime = () => {
   } = useFormContext();
 
   const { selectedStaff, selectedDate, selectedTime } = useSelector(
-    (state: RootState) => state.formSlice
+    (state: RootState) => state.formSlice,
   ); // Assuming 'form' is your slice name in the root state
 
   const formattedDayOfWeek = selectedDate ? format(selectedDate, "i") : "";
@@ -29,7 +29,8 @@ const StepDateTime = () => {
 
   const filteredSlots = availabilitySlots.filter(
     (slot) =>
-      slot.barber_name === selectedStaff && slot.day_of_week === dayOfWeekNumber
+      slot.barber_name === selectedStaff &&
+      slot.day_of_week === dayOfWeekNumber,
   );
 
   useEffect(() => {
@@ -67,7 +68,7 @@ const StepDateTime = () => {
           !availabilitySlots.some(
             (slot) =>
               slot.day_of_week === date.getDay() &&
-              slot.barber_name === selectedStaff
+              slot.barber_name === selectedStaff,
           )
         }
         {...register("date")}

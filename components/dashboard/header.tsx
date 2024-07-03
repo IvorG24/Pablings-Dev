@@ -11,8 +11,9 @@ import {
 } from "next/dist/client/components/redirect";
 import { SubmitButton } from "../SubmitButton";
 import Link from "next/link";
+import MenuDrawer from "./drawer";
 
-const tabs = [
+export const TabsContent = [
   { value: "overview", label: "Sales Overview", icon: <GoGraph /> },
   { value: "appointment", label: "Appointment", icon: <MdPushPin /> },
   { value: "records", label: "Records", icon: <IoNewspaperSharp /> },
@@ -21,13 +22,13 @@ const tabs = [
 ];
 
 const Header = () => (
-  <header className="w-full h-16 p-4 bg-yellow-200 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30">
+  <header className="w-full h-16 p-4 bg-yellow-200 xl:rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30">
     <nav className="flex justify-between items-center">
       <Link href={"/dashboard"} className="text-2xl font-bold text-yellow-500">
         Pablings
       </Link>
-      <TabsList>
-        {tabs.map(({ value, label, icon }) => (
+      <TabsList className="hidden xl:flex">
+        {TabsContent.map(({ value, label, icon }) => (
           <TabsTrigger
             key={value}
             value={value}
@@ -56,6 +57,7 @@ const Header = () => (
           <SubmitButton pendingText="Signing out...">Sign Out</SubmitButton>
         </form>
       </TabsList>
+      <MenuDrawer />
     </nav>
   </header>
 );

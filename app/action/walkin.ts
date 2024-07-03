@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import prisma from "@/lib/prisma";
 import { auth } from "@/auth";
 import { extras, services } from "@/lib/data";
+import { queryClient } from "@/lib/query";
 
 export async function AddWalkinClient(formdata: FormData) {
   const session = await auth();
@@ -23,7 +24,7 @@ export async function AddWalkinClient(formdata: FormData) {
   let servicePrice = 0;
   for (const category in services) {
     const serviceItem = services[category].find(
-      (item) => item.name === service
+      (item) => item.name === service,
     );
     if (serviceItem) {
       servicePrice = serviceItem.price;
@@ -58,22 +59,27 @@ export async function AddWalkinClient(formdata: FormData) {
   const staffSales = totalPrice * 0.5;
   const ownerSales = totalPrice * 0.5;
 
-  await prisma.sales.create({
-    data: {
-      userId: session.user.id,
-      customer_name: fullname,
-      customer_email: email,
-      service: service,
-      staff: barber,
-      extraservices: extraServicesArray,
-      staffsales: staffSales,
-      ownersales: ownerSales,
-      totalsales: totalPrice,
-      trasactiondate: currentFormatted,
-    },
-  });
+  try {
+    const response = await prisma.sales.create({
+      data: {
+        userId: session.user.id,
+        customer_name: fullname,
+        customer_email: email,
+        service: service,
+        staff: barber,
+        extraservices: extraServicesArray,
+        staffsales: staffSales,
+        ownersales: ownerSales,
+        totalsales: totalPrice,
+        trasactiondate: currentFormatted,
+      },
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ["Sales", "SalesOverview", "ChartData"],
+    });
 
-  return {
-    message: "Walk-in client added successfully",
-  };
+    return response;
+  } catch (e) {
+    throw new Error(`${e}`);
+  }
 }

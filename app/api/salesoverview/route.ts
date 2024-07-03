@@ -1,26 +1,17 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import {
-  format,
-  startOfWeek,
-  endOfWeek,
-  startOfYear,
-  endOfYear,
-  startOfMonth,
-  endOfMonth,
-} from "date-fns";
+import { format } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  //   const session = await auth();
-  //   if (!session) {
-  //     return NextResponse.json(
-  //       { error: "You are not authenticated" },
-  //       { status: 500 }
-  //     );
-  //   }
+  const session = await auth();
+  if (!session) {
+    return NextResponse.json(
+      { error: "You are not authenticated" },
+      { status: 500 },
+    );
+  }
   try {
-    // for the dougnut data
     const currentFormatted = format(new Date(), "yyyy-MM-dd");
     const todaysales = await prisma.sales.aggregate({
       _sum: {
@@ -51,9 +42,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         staff: true,
         service: true,
         extraservices: true,
+        time_slot: true,
       },
       where: {
         trasactiondate: currentFormatted,
+      },
+      orderBy: {
+        trasactiondate: "asc",
       },
     });
 
@@ -72,7 +67,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     console.error(e);
     return NextResponse.json(
       { error: "An error occurred while fetching data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

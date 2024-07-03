@@ -31,10 +31,12 @@ export type SalesOverviewData = {
   todaycustomer: number;
   totalsalesAmount: number;
   totalcustomer: number;
+
   yearlySales: number[];
   todaycustomerlist: {
     customer_name: string | null;
     staff: string;
+    time_slot: string;
     service: string;
     extraservices: string[];
   }[];
@@ -53,6 +55,7 @@ type dougnut = {
 export type ChartSalesData = {
   monthlySales: number[];
   weeklySalesData: weekly[];
+  dailySalesData: number[];
   doughnutData: dougnut[];
 };
 export type AppointmentState = {

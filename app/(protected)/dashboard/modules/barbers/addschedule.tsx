@@ -28,7 +28,7 @@ import useBarberData from "@/hooks/useBarberData";
 import { Barber } from "@prisma/client";
 
 const AddSchedule = () => {
-  const { barberlist, timeSlots } = useBarberData();
+  const { barberlist, timeSlots, isLoading, isError, error } = useBarberData();
   async function onSubmit(formdata: FormData) {
     try {
       const barber = formdata.get("barberName") as string;
@@ -45,7 +45,13 @@ const AddSchedule = () => {
       });
     }
   }
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
+  if (isError) {
+    return <div>Error: {error?.message}</div>;
+  }
   return (
     <>
       {barberlist.map((barber: Barber) => (

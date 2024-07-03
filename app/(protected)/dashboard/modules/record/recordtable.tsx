@@ -33,16 +33,26 @@ import AddVoucher from "./addVoucher";
 const RecordTable = () => {
   const {
     take,
+    isLoading,
     searchFilter,
     setSearchFilter,
     filteredData,
     skip,
+    isError,
+    error,
     handlePageClick,
     handlePrevious,
     handleNext,
     totalPages,
     totalItems,
   } = useRecordData();
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error?.message}</div>;
+  }
   return (
     <>
       <div className="flex justify-between items-center mb-4">

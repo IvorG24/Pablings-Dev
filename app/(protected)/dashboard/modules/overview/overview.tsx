@@ -5,9 +5,13 @@ import ChartComponent from "@/components/dashboard/modules/chart";
 import { useSalesOverview } from "@/hooks/useSalesOverview";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import DataCard from "@/components/dashboard/modules/datacard";
+import { MdPerson } from "react-icons/md";
+import { FaCoins } from "react-icons/fa";
+import { IoIosCut } from "react-icons/io";
+import { TbCurrencyPeso } from "react-icons/tb";
 const SalesOverview = () => {
   const { data, error, isLoading, isError } = useSalesOverview();
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -16,7 +20,6 @@ const SalesOverview = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  // Destructure the data
   const {
     todaysalesAmount,
     todaycustomer,
@@ -29,40 +32,39 @@ const SalesOverview = () => {
     <section className="grid grid-cols-7 gap-5 min-h-screen">
       <div className="col-span-5 flex flex-col gap-5">
         <div className="flex gap-5">
-          <Card className="w-full max-w-xs">
-            <CardHeader>
-              <CardTitle>Today Sales</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{todaysalesAmount}</p>
-            </CardContent>
-          </Card>
+          <DataCard
+            label="Today Sales"
+            value={todaysalesAmount}
+            icon={<TbCurrencyPeso className="font-bold text-4xl" />}
+            secondaryicon={
+              <FaCoins className="font-bold text-3xl text-yellow-500" />
+            }
+          />
 
-          <Card className="w-full max-w-xs">
-            <CardHeader>
-              <CardTitle>Total Sales</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{totalsalesAmount}</p>
-            </CardContent>
-          </Card>
-          <Card className="w-full max-w-xs">
-            <CardHeader>
-              <CardTitle>Today Customer</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{todaycustomer}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="w-full max-w-xs">
-            <CardHeader>
-              <CardTitle>Total Customer</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>{totalcustomer}</p>
-            </CardContent>
-          </Card>
+          <DataCard
+            label="Overall Sales"
+            value={totalsalesAmount}
+            icon={<TbCurrencyPeso className="font-bold text-4xl" />}
+            secondaryicon={
+              <FaCoins className="font-bold text-3xl text-yellow-500" />
+            }
+          />
+          <DataCard
+            label="Today Customers"
+            value={todaycustomer}
+            icon={<MdPerson className="font-bold text-4xl" />}
+            secondaryicon={
+              <IoIosCut className="font-bold text-3xl text-yellow-500" />
+            }
+          />
+          <DataCard
+            label="Total Customers"
+            value={totalcustomer}
+            icon={<MdPerson className="font-bold text-4xl" />}
+            secondaryicon={
+              <IoIosCut className="font-bold text-3xl text-yellow-500" />
+            }
+          />
         </div>
 
         <div className="border-2 border-yellow-500 h-full min-h-[550px] rounded-lg">
@@ -99,6 +101,12 @@ const SalesOverview = () => {
                 key={index}
               >
                 <div className="flex flex-col gap-1">
+                  {customer.time_slot === "" || null ? (
+                    <p className="text-sm">Time: {customer.time_slot}</p>
+                  ) : (
+                    <p className="text-sm">Walk In</p>
+                  )}
+
                   <p className="text-sm">Client: {customer.customer_name}</p>
                   <p className="text-sm">Barber: {customer.staff}</p>
                 </div>

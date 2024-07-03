@@ -33,34 +33,8 @@ Chart.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement
+  ArcElement,
 );
-
-// Yearly data
-
-// Monthly data
-
-// Weekly data (changed from Daily)
-const weeklyData = {
-  labels: [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ],
-  datasets: [
-    {
-      label: "Weekly Sales",
-      data: [12, 19, 3, 5, 2, 3, 9],
-      fill: true,
-      borderColor: "rgb(255, 99, 132)",
-      tension: 0.1,
-    },
-  ],
-};
 
 interface CharComponentProps {
   variant: "doughnut" | "line";
@@ -76,13 +50,21 @@ const ChartComponent = ({ variant }: CharComponentProps) => {
     return <div>Error: {error.message}</div>;
   }
 
-  const { monthlySales, doughnutData, weeklySalesData } = data!;
+  const { monthlySales, doughnutData, weeklySalesData, dailySalesData } = data!;
 
   const doughnutlabels = doughnutData.map((group) => group.staff);
   const doughnutdata = doughnutData.map((group) => group._count.staff);
   const weeklydatalabels = weeklySalesData.map((group) => group.weeklyLabel);
   const weeklydatasales = weeklySalesData.map((group) => group.totalSales);
+  const today = new Date();
+  const dayOfMonth = today.getDate();
+  const weekOfMonth = Math.ceil(dayOfMonth / 7);
+  const month = today.toLocaleString("default", { month: "long" }); // Full month name
+  const year = today.getFullYear(); // Current year
 
+  const labelForYear = `Monthly Sales for the Year ${year}`;
+  const labelForMonth = `Weekly Sales for the Month of ${month}`;
+  const labelForWeek = `Weekly Sales for Week ${weekOfMonth} of ${month}`;
   const dougnutdata = {
     labels: doughnutlabels,
     datasets: [
@@ -104,6 +86,26 @@ const ChartComponent = ({ variant }: CharComponentProps) => {
     ],
   };
 
+  const weeklyData = {
+    labels: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    datasets: [
+      {
+        label: labelForWeek,
+        data: dailySalesData,
+        fill: true,
+        borderColor: "rgb(255, 99, 132)",
+        tension: 0.1,
+      },
+    ],
+  };
   const yearlyData = {
     labels: [
       "January",
@@ -121,7 +123,7 @@ const ChartComponent = ({ variant }: CharComponentProps) => {
     ],
     datasets: [
       {
-        label: "Yearly Sales",
+        label: labelForYear,
         data: monthlySales,
         fill: true,
         borderColor: "rgb(75, 192, 192)",
@@ -134,7 +136,7 @@ const ChartComponent = ({ variant }: CharComponentProps) => {
     labels: weeklydatalabels, // Days of the month
     datasets: [
       {
-        label: "Weekly Sales",
+        label: labelForMonth,
         data: weeklydatasales,
         fill: true,
         borderColor: "rgb(54, 162, 235)",

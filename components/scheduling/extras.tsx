@@ -12,7 +12,7 @@ import FormCard from "../ui/formcard";
 const StepExtraServices = () => {
   const dispatch = useDispatch();
   const { selectedExtra, selectedStaff, selectedExtraPrice } = useSelector(
-    (state: RootState) => state.formSlice
+    (state: RootState) => state.formSlice,
   );
   const {
     setValue,

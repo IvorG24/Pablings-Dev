@@ -9,7 +9,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (!session) {
     return NextResponse.json(
       { error: "You are not authenticated" },
-      { status: 500 }
+      { status: 500 },
     );
   }
   try {
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     if (isNaN(take) || isNaN(skip) || take <= 0 || skip < 0) {
       return NextResponse.json(
         { error: "Invalid pagination parameters" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     let status: Status | undefined;
@@ -36,17 +36,17 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const pendingAppointments = await fetchAppointments(
       Status.Pending,
       take,
-      skip
+      skip,
     );
     const declinedAppointments = await fetchAppointments(
       Status.Declined,
       take,
-      skip
+      skip,
     );
     const confirmedAppointments = await fetchAppointments(
       Status.Confirm,
       take,
-      skip
+      skip,
     );
 
     const totalAppointments = await countAppointments(status || Status.Pending);
@@ -63,7 +63,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     console.error("Error fetching appointments:", error);
     return NextResponse.json(
       { error: "Failed to fetch appointments" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     // Prisma disconnection
@@ -75,7 +75,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 async function fetchAppointments(
   status: Status,
   take: number,
-  skip: number
+  skip: number,
 ): Promise<any[]> {
   return prisma.appointment.findMany({
     where: { status: status },

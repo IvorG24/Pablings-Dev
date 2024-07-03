@@ -6,12 +6,14 @@ import {
   endOfWeek,
   startOfMonth,
   addWeeks,
+  addDays,
+  startOfDay,
+  endOfDay,
   isSameMonth,
 } from "date-fns";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  // Uncomment if you need authentication
   // const session = await auth();
   // if (!session) {
   //   return NextResponse.json(
@@ -21,6 +23,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   // }
   try {
     const currentYear = new Date().getFullYear();
+    const currentFormatted = format(new Date(), "yyyy-MM-dd");
     const monthlySalesData: { totalSales: number }[] = [];
     const salesData = await prisma.sales.groupBy({
       by: ["trasactiondate"],
@@ -34,26 +37,18 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         },
       },
       orderBy: {
-        trasactiondate: "asc",
+        trasactiondate: "desc",
       },
     });
 
-    // Initialize an array for monthly sales data
     for (let month = 1; month <= 12; month++) {
       const monthlyData = salesData.find(
-        (data) => new Date(data.trasactiondate).getMonth() + 1 === month
+        (data) => new Date(data.trasactiondate).getMonth() + 1 === month,
       );
-
-      // Push the result into the array
       monthlySalesData.push({
         totalSales: monthlyData?._sum.totalsales || 0,
       });
     }
-
-    // Prepare the data for the chart
-    const monthlySales = monthlySalesData.map(
-      (monthData) => monthData.totalSales
-    );
 
     const now = new Date();
     const startOfMonthDate = startOfMonth(now);
@@ -75,8 +70,30 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         end: format(endOfWeekDate, "yyyy-MM-dd"),
       });
     }
+    const startOfWeekDate = startOfWeek(now, { weekStartsOn: 1 });
+    const endOfWeekDate = endOfWeek(startOfWeekDate, { weekStartsOn: 1 });
 
-    // Fetch weekly sales data for the current month
+    const dailysalesdata = await Promise.all(
+      Array.from({ length: 7 }, (_, i) => {
+        const currentDate = addDays(startOfWeekDate, i);
+        return prisma.sales
+          .aggregate({
+            _sum: {
+              totalsales: true,
+            },
+            where: {
+              trasactiondate: {
+                gte: startOfDay(currentDate).toISOString(),
+                lte: endOfDay(currentDate).toISOString(),
+              },
+            },
+          })
+          .then(({ _sum: { totalsales } }) => ({
+            totalSales: totalsales || 0, // Only include total sales
+          }));
+      }),
+    );
+
     const weeklySalesData = await Promise.all(
       weeks.map(async (week) => {
         const {
@@ -97,10 +114,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
           weeklyLabel: `Week ${week.weekNumber}`, // Label for the week
           totalSales: totalsales || 0, // Total sales for the week
         };
-      })
+      }),
     );
-
-    const currentFormatted = format(new Date(), "yyyy-MM-dd");
+    const monthlySales = monthlySalesData.map(
+      (monthData) => monthData.totalSales,
+    );
     const doughnutData = await prisma.sales.groupBy({
       by: ["staff"],
       _count: {
@@ -113,17 +131,20 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
         },
       },
     });
-
+    const dailySalesData = dailysalesdata.map(
+      (dailyData) => dailyData.totalSales,
+    );
     return NextResponse.json({
       monthlySales,
       weeklySalesData,
       doughnutData,
+      dailySalesData,
     });
   } catch (e) {
     console.error(e);
     return NextResponse.json(
       { error: "An error occurred while fetching data" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

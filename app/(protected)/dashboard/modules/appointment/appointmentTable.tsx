@@ -44,8 +44,18 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
     handlePrevious,
     handlePageClick,
     handleNext,
+    isLoading,
+    isError,
+    error,
   } = useAppointmenData({ variant });
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error: {error?.message}</div>;
+  }
   return (
     <>
       {variant === "pending" && (

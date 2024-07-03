@@ -9,7 +9,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (!session) {
     return NextResponse.json(
       { error: "You are not authenticated" },
-      { status: 500 }
+      { status: 500 },
     );
   }
   try {
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       if (isNaN(take) || isNaN(skip) || take <= 0 || skip < 0) {
         return NextResponse.json(
           { error: "Invalid pagination parameters" },
-          { status: 400 }
+          { status: 400 },
         );
       }
 
@@ -47,7 +47,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     console.error("Error fetching appointments:", error);
     return NextResponse.json(
       { error: "Failed to fetch appointments" },
-      { status: 500 }
+      { status: 500 },
     );
   } finally {
     await prisma.$disconnect();

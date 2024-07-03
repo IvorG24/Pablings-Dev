@@ -80,7 +80,7 @@ const AddWalkin = () => {
                   <SelectItem key={service.name} value={`${service.name} `}>
                     {service.name}
                   </SelectItem>
-                ))
+                )),
               )}
             </SelectContent>
           </Select>

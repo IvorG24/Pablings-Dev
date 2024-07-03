@@ -49,7 +49,7 @@ export async function AppointmentAction(appointmentValues: AppointmentValues) {
 
 export async function authenticate(
   prevState: string | undefined,
-  formData: FormData
+  formData: FormData,
 ) {
   try {
     await signIn("credentials", formData);

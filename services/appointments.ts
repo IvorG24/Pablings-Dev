@@ -5,7 +5,7 @@ import { getSession } from "next-auth/react";
 export async function fetchAppointmentsList(
   take = 15,
   skip = 0,
-  status: Status = Status.Pending // Default status is Pending
+  status: Status = Status.Pending, // Default status is Pending
 ): Promise<AppointmentResponse> {
   try {
     const session = await getSession();
@@ -13,7 +13,7 @@ export async function fetchAppointmentsList(
       throw new Error("No session or access token found");
     }
     const response = await fetch(
-      `/api/appointments?take=${take}&skip=${skip}&status=${status}`
+      `/api/appointments?take=${take}&skip=${skip}&status=${status}`,
     );
     if (!response.ok) {
       const errorData = await response.json();
