@@ -46,6 +46,7 @@ const RecordTable = () => {
     totalPages,
     totalItems,
   } = useRecordData();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -63,7 +64,6 @@ const RecordTable = () => {
           value={searchFilter}
           onChange={(e) => setSearchFilter(e.target.value)}
         />
-        <Button>Add Walk in</Button>
       </div>
 
       <Table>
@@ -79,7 +79,9 @@ const RecordTable = () => {
             <TableHead>Barber Sales</TableHead>
             <TableHead>Owner Sales</TableHead>
             <TableHead>Total Sales </TableHead>
+            <TableHead>Time Slot</TableHead>
             <TableHead>Transaction Date</TableHead>
+
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
@@ -104,6 +106,11 @@ const RecordTable = () => {
               <TableCell>{table.staffsales}</TableCell>
               <TableCell>{table.ownersales}</TableCell>
               <TableCell>{table.totalsales}</TableCell>
+              {!table.time_slot ? (
+                <TableCell>Walk In</TableCell>
+              ) : (
+                <TableCell>{table.time_slot}</TableCell>
+              )}
               <TableCell>{table.trasactiondate}</TableCell>
               <TableCell className="text-right">
                 <DropdownMenu>

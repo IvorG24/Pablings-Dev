@@ -14,6 +14,8 @@ import { addBarber } from "@/app/action/barber";
 import { Barber } from "@prisma/client";
 import { toast } from "@/components/ui/use-toast";
 import { SubmitButton } from "@/components/SubmitButton";
+import { Avatar } from "@radix-ui/react-avatar";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const AddBarber = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -36,7 +38,7 @@ const AddBarber = () => {
 
   return (
     <Dialog>
-      <DialogTrigger className="w-full h-40 xl:max-w-[410px] rounded-lg border-2 border-yellow-600 flex items-center justify-center text-3xl">
+      <DialogTrigger className="w-full h-40 max-w-sm rounded-lg border-2 border-yellow-600 flex items-center justify-center text-3xl">
         +
       </DialogTrigger>
       <DialogContent>
@@ -69,11 +71,10 @@ const AddBarber = () => {
                   onChange={handleFileChange}
                 />
                 {imageName ? (
-                  <img
-                    src={imageBase64}
-                    alt="Profile"
-                    className="w-full h-full object-cover rounded-full"
-                  />
+                  <Avatar>
+                    <AvatarImage src={imageBase64} alt="@shadcn" />
+                    <AvatarFallback>BB</AvatarFallback>
+                  </Avatar>
                 ) : (
                   <p className="text-center cursor-pointer">+</p>
                 )}

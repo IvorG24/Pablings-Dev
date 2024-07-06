@@ -49,15 +49,14 @@ export async function addBarberSchedule(formdata: FormData) {
   const barber = formdata.get("barberName") as string;
   const slot = formdata.get("slot") as string;
   const day = formdata.get("day") as unknown as string;
-  console.log(barber);
 
   const sameslot = await prisma.slot.findMany({
     where: {
       barber_name: barber,
       time_slot: slot,
+      day_of_week: day,
     },
   });
-  console.log(sameslot);
 
   if (sameslot.length > 0) {
     throw new Error("Slot occupied.");
@@ -71,9 +70,8 @@ export async function addBarberSchedule(formdata: FormData) {
   });
 
   if (!response) {
-    throw error;
+    throw new Error(`${error}`);
   }
-
   console.log("Slot added with to", barber);
   return response;
 }

@@ -2,19 +2,26 @@ import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AddWalkin from "./walkin";
 import NewService from "./newservice";
+import prisma from "@/lib/prisma";
 
 const AdditionalList = async () => {
+  const barber = await prisma.barber.findMany({
+    select: {
+      name: true,
+    },
+  });
   const tabContents = [
     {
       value: "walkin",
       label: "Add Walk in",
-      component: <AddWalkin />,
+      component: <AddWalkin data={barber} />,
     },
-    {
-      value: "services",
-      label: "Add Services",
-      component: <NewService />,
-    },
+    // future changes or adds
+    // {
+    //   value: "services",
+    //   label: "Add Services",
+    //   component: <NewService />,
+    // },
     // {
     //   value: "add",
     //   label: "Declined",

@@ -21,19 +21,19 @@ const formSlice = createSlice({
   reducers: {
     selectService(
       state,
-      action: PayloadAction<{ serviceName: string; price: number }>,
+      action: PayloadAction<{ serviceName: string; price: number }>
     ) {
       state.selectedService = action.payload.serviceName;
       state.selectedPrice = action.payload.price;
     },
     selectExtra(
       state,
-      action: PayloadAction<{ extraName: string; price: number }>,
+      action: PayloadAction<{ extraName: string; price: number }>
     ) {
       const { extraName, price } = action.payload;
       if (state.selectedExtra.includes(extraName)) {
         state.selectedExtra = state.selectedExtra.filter(
-          (extra) => extra !== extraName,
+          (extra) => extra !== extraName
         );
         state.selectedExtraPrice -= price;
       } else {
@@ -44,7 +44,7 @@ const formSlice = createSlice({
 
     selectDateTime(
       state,
-      action: PayloadAction<{ date: string; time: string }>,
+      action: PayloadAction<{ date: string; time: string }>
     ) {
       const { date, time } = action.payload;
       state.selectedDate = date;
@@ -55,7 +55,7 @@ const formSlice = createSlice({
     },
     selectPersonalInfo(
       state,
-      action: PayloadAction<{ name: string; email: string; phone: string }>,
+      action: PayloadAction<{ name: string; email: string; phone: string }>
     ) {
       const { name, email, phone } = action.payload;
       state.name = name;

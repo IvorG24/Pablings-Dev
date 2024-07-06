@@ -6,10 +6,7 @@ import AddSchedule from "./addschedule";
 const BarberList = async () => {
   return (
     <main>
-      <div className="flex flex-wrap w-full gap-10">
-        <AddBarber />
-        <AddSchedule />
-      </div>
+      <AddSchedule />
     </main>
   );
 };

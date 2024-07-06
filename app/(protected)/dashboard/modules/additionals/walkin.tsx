@@ -14,8 +14,12 @@ import { services, extras } from "@/lib/data";
 import { AddWalkinClient } from "@/app/action/walkin";
 import MultipleSelector from "@/components/ui/multiselect";
 import { toast } from "@/components/ui/use-toast";
-
-const AddWalkin = () => {
+type AddWalkinProps = {
+  data: {
+    name: string;
+  }[];
+};
+const AddWalkin = ({ data }: AddWalkinProps) => {
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
   const [formdata, setFormdata] = useState(new FormData());
 
@@ -80,7 +84,7 @@ const AddWalkin = () => {
                   <SelectItem key={service.name} value={`${service.name} `}>
                     {service.name}
                   </SelectItem>
-                )),
+                ))
               )}
             </SelectContent>
           </Select>
@@ -107,12 +111,18 @@ const AddWalkin = () => {
 
         <div className="flex flex-col gap-2">
           <Label htmlFor="barber">Barber</Label>
-          <Input
-            id="barber"
-            name="barber"
-            type="text"
-            placeholder="Barber name"
-          />
+          <Select name="barber">
+            <SelectTrigger>
+              <SelectValue placeholder="Select barber name" />
+            </SelectTrigger>
+            <SelectContent>
+              {data.map((barber, index) => (
+                <SelectItem key={index} value={`${barber.name} `}>
+                  {barber.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-col gap-2">

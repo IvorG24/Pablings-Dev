@@ -12,28 +12,31 @@ export type FormState = {
   phone: string;
   totalPrice: number;
 };
-
 export type Service = {
   name: string;
   description: string;
   price: number;
 };
-
 export type Extra = {
   label: string;
   value: string;
   description: string;
   price: number;
 };
-
 export type SalesOverviewData = {
   todaysalesAmount: number;
   todaycustomer: number;
   totalsalesAmount: number;
   totalcustomer: number;
-
   yearlySales: number[];
   todaycustomerlist: {
+    customer_name: string | null;
+    staff: string;
+    time_slot: string;
+    service: string;
+    extraservices: string[];
+  }[];
+  tomorrowcustomerlist: {
     customer_name: string | null;
     staff: string;
     time_slot: string;
@@ -57,6 +60,22 @@ export type ChartSalesData = {
   weeklySalesData: weekly[];
   dailySalesData: number[];
   doughnutData: dougnut[];
+};
+
+export type TimeSlot = {
+  barber_name: string;
+  time_slot: string;
+  day_of_week: string;
+};
+
+export type TimeSlotData = {
+  barberslots: TimeSlot[];
+};
+
+export type BarBerListData = {
+  barberlist: {
+    barber_name: string;
+  }[];
 };
 export type AppointmentState = {
   data: Appointment[];

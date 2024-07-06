@@ -25,7 +25,7 @@ const useRecordData = () => {
   // Debounce the fetchRecords function
   const debouncedFetchRecords = useCallback(
     debounce((filter: string) => fetchRecords(filter), 300), // Adjust 300ms delay as needed
-    [take, skip],
+    [take, skip]
   );
 
   // Fetch records based on the search filter

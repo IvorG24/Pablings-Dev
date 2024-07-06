@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { Button } from "./ui/button";
 
 interface FormButtonProps {
@@ -15,7 +15,7 @@ const FormButton = ({ variant, counter, steps }: FormButtonProps) => {
   let buttonText = "Submit"; // Default button text
   if (variant === "appointment") {
     buttonText =
-      counter === React.Children.count(steps) - 1 ? "Booking" : "Next";
+      counter === React.Children.count(steps) - 1 ? "Book now" : "Next";
   }
 
   return (
@@ -25,7 +25,7 @@ const FormButton = ({ variant, counter, steps }: FormButtonProps) => {
           {isSubmitting ? "Submitting..." : buttonText}
         </Button>
       ) : variant === "appointment" ? (
-        <Button type="submit" disabled={isSubmitting}>
+        <Button variant={"ghost"} type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : buttonText}
         </Button>
       ) : (

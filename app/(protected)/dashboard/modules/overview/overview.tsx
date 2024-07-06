@@ -10,14 +10,16 @@ import { MdPerson } from "react-icons/md";
 import { FaCoins } from "react-icons/fa";
 import { IoIosCut } from "react-icons/io";
 import { TbCurrencyPeso } from "react-icons/tb";
+import { addDays, format } from "date-fns";
 const SalesOverview = () => {
-  const { data, error, isLoading, isError } = useSalesOverview();
+  const { data, error, isLoading, isError, tomorrowFormatted } =
+    useSalesOverview();
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
   if (isError) {
-    return <div>Error: {error.message}</div>;
+    return <div>Error: {`${error}`}</div>;
   }
 
   const {
@@ -26,6 +28,7 @@ const SalesOverview = () => {
     totalsalesAmount,
     totalcustomer,
     todaycustomerlist,
+    tomorrowcustomerlist,
   } = data!;
 
   return (
@@ -74,9 +77,35 @@ const SalesOverview = () => {
 
         <Card className="w-full h-full">
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
+            <CardTitle>Tomorrow Clients for {tomorrowFormatted}</CardTitle>
           </CardHeader>
-          <CardContent></CardContent>
+          <ScrollArea className="h-[350px] w-full ">
+            {tomorrowcustomerlist.map((customer, index) => (
+              <div
+                className="mx-8 flex justify-between items-start p-2 border-b"
+                key={index}
+              >
+                <div className="flex flex-col gap-1">
+                  {customer.time_slot === "" || null ? (
+                    <p className="text-sm">Time: {customer.time_slot}</p>
+                  ) : (
+                    <p className="text-sm">Walk In</p>
+                  )}
+
+                  <p className="text-sm">Client: {customer.customer_name}</p>
+                  <p className="text-sm">Barber: {customer.staff}</p>
+                </div>
+                <div className="flex flex-col items-end space-y-1">
+                  <Badge>{customer.service}</Badge>
+                  {customer.extraservices.length > 0 ? (
+                    <Badge>{customer.extraservices.join(", ")}</Badge>
+                  ) : (
+                    "No extras"
+                  )}
+                </div>
+              </div>
+            ))}
+          </ScrollArea>
         </Card>
       </div>
 

@@ -14,15 +14,12 @@ export async function AppointmentAction(appointmentValues: AppointmentValues) {
   }
 
   try {
-    // Fetch the latest BookingNumber
     const latestAppointment = await prisma.appointment.findFirst({
       orderBy: { BookingNumber: "desc" },
     });
-
     const nextBookingNumber = latestAppointment
       ? latestAppointment.BookingNumber + 1
       : 1;
-
     const newAppointment = await prisma.appointment.create({
       data: {
         BookingNumber: nextBookingNumber,
@@ -40,6 +37,7 @@ export async function AppointmentAction(appointmentValues: AppointmentValues) {
     await queryClient.invalidateQueries({
       queryKey: ["Appointment"],
     });
+
     return newAppointment;
   } catch (error) {
     console.error("ERROR OCCURRED IN APPOINTMENT ACTION", error);
@@ -49,7 +47,7 @@ export async function AppointmentAction(appointmentValues: AppointmentValues) {
 
 export async function authenticate(
   prevState: string | undefined,
-  formData: FormData,
+  formData: FormData
 ) {
   try {
     await signIn("credentials", formData);
