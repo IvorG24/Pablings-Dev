@@ -5,7 +5,7 @@ import { Appointment } from "@prisma/client";
 import { auth } from "@/auth";
 export async function ApproveAppointment(
   appointment_id: string,
-  appointmentData: Appointment[],
+  appointmentData: Appointment[]
 ) {
   const session = await auth();
   if (!session) {
@@ -23,7 +23,7 @@ export async function ApproveAppointment(
     });
 
     const appointment = appointmentData.find(
-      (app) => app.appointment_id === appointment_id,
+      (app) => app.appointment_id === appointment_id
     );
     if (appointment) {
       await prisma.sales.create({
@@ -35,22 +35,25 @@ export async function ApproveAppointment(
           customer_email: appointment.email,
           customer_name: appointment.name,
           staffsales: appointment.totalprice * 0.5,
-          ownersales: appointment.totalprice * 0.5,
+          ownersales: appointment.totalprice,
           totalsales: appointment.totalprice,
           trasactiondate: appointment.date,
         },
       });
+      // await prisma.slot.update({
+
+      // })
     }
     await queryClient.invalidateQueries({
       queryKey: ["Sales", "SalesOverview", "ChartData"],
     });
     console.log(
-      `Appointment with ID ${appointment_id} has been confirmed and a sales entry created.`,
+      `Appointment with ID ${appointment_id} has been confirmed and a sales entry created.`
     );
   } catch (error) {
     console.error(
       `Error updating appointment with ID ${appointment_id}:`,
-      error,
+      error
     );
   }
 }
@@ -71,7 +74,7 @@ export async function DeclineAppointment(appointment_id: string) {
   } catch (error) {
     console.error(
       `Error updating appointment with ID ${appointment_id}:`,
-      error,
+      error
     );
   }
 }

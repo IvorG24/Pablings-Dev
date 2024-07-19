@@ -12,54 +12,86 @@ import {
 import { SubmitButton } from "../SubmitButton";
 import Link from "next/link";
 import MenuDrawer from "./drawer";
+import { ADMIN_ROLE, COUNTER_ROLE } from "@/lib/type";
 
 export const TabsContent = [
-  { value: "overview", label: "Sales Overview", icon: <GoGraph /> },
-  { value: "appointment", label: "Appointment", icon: <MdPushPin /> },
+  {
+    value: "overview",
+    label: "Sales Overview",
+    icon: <GoGraph />,
+    role: [ADMIN_ROLE, COUNTER_ROLE],
+  },
+  {
+    value: "appointment",
+    label: "Appointment",
+    icon: <MdPushPin />,
+    role: [ADMIN_ROLE, COUNTER_ROLE],
+  },
   { value: "records", label: "Records", icon: <IoNewspaperSharp /> },
-  { value: "barber", label: "Barbers", icon: <IoPersonSharp /> },
-  { value: "walkin", label: "Walk In", icon: <FaUserPlus /> },
+  {
+    value: "barber",
+    label: "Barbers",
+    icon: <IoPersonSharp />,
+    role: [ADMIN_ROLE, COUNTER_ROLE],
+  },
+  {
+    value: "walkin",
+    label: "Walk In",
+    icon: <FaUserPlus />,
+    role: [COUNTER_ROLE],
+  },
 ];
+interface HeaderProps {
+  userRole?: string;
+}
 
-const Header = () => (
-  <header className="w-full h-16 p-4 bg-yellow-200 xl:rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30">
-    <nav className="flex justify-between items-center">
-      <Link href={"/dashboard"} className="text-2xl font-bold text-yellow-500">
-        Pablings
-      </Link>
-      <TabsList className="hidden xl:flex">
-        {TabsContent.map(({ value, label, icon }) => (
-          <TabsTrigger
-            key={value}
-            value={value}
-            className="flex items-center space-x-2"
-          >
-            {icon}
-            <span>{label}</span>
-          </TabsTrigger>
-        ))}
+const Header = async ({ userRole }: HeaderProps) => {
+  const role = userRole || COUNTER_ROLE;
 
-        <form
-          action={async () => {
-            "use server";
-            try {
-              await signOut({ redirect: false });
-            } catch (err) {
-              if (isRedirectError(err)) {
-                console.error(err);
-                throw err;
-              }
-            } finally {
-              redirect("/sign-in");
-            }
-          }}
+  return (
+    <header className="w-full h-20 p-6 bg-yellow-200 xl:rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-30">
+      <nav className="flex justify-between items-center">
+        <Link
+          href={"/dashboard"}
+          className="text-4xl text-yellow-500 font-serif font-bold"
         >
-          <SubmitButton pendingText="Signing out...">Sign Out</SubmitButton>
-        </form>
-      </TabsList>
-      <MenuDrawer />
-    </nav>
-  </header>
-);
+          Pablings Pasig Sandoval
+        </Link>
+        <TabsList className="hidden xl:flex">
+          {TabsContent.filter(
+            (tab) => !tab.role || tab.role.includes(role)
+          ).map(({ value, label, icon }) => (
+            <TabsTrigger
+              key={value}
+              value={value}
+              className="flex items-center space-x-2"
+            >
+              {icon}
+              <span>{label}</span>
+            </TabsTrigger>
+          ))}
+          <form
+            action={async () => {
+              "use server";
+              try {
+                await signOut({ redirect: false });
+              } catch (err) {
+                if (isRedirectError(err)) {
+                  console.error(err);
+                  throw err;
+                }
+              } finally {
+                redirect("/sign-in");
+              }
+            }}
+          >
+            <SubmitButton pendingText="Signing out...">Sign Out</SubmitButton>
+          </form>
+        </TabsList>
+        <MenuDrawer role={role} />
+      </nav>
+    </header>
+  );
+};
 
 export default Header;

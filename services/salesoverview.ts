@@ -41,7 +41,6 @@ export async function fetchChartData(): Promise<ChartSalesData> {
     }
 
     const data: ChartSalesData = await response.json();
-    console.log(data);
 
     return data;
   } catch (error) {

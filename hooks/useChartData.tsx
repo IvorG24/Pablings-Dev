@@ -8,6 +8,8 @@ export function useChartData() {
   return useQuery<ChartSalesData>({
     queryKey: ["ChartData"], // Use a unique key for the query
     queryFn: fetchChartData, // Function to fetch data
+    staleTime: 60000, // Data is fresh for 1 minute
+    gcTime: 300000, // Cache data for 5 minutes
   });
 }
 export function useTimeSlotData(name: string) {

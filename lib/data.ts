@@ -196,7 +196,7 @@ export const stepLabels = [
     icon: TbCircleNumber4Filled,
   },
   {
-    label: "Personal Information",
+    label: "Personal Info",
     icon: TbCircleNumber5Filled,
   },
   {

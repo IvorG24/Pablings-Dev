@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSalesOverview } from "@/hooks/useSalesOverview";
 import { useChartData } from "@/hooks/useChartData";
+import LoadingSpinner from "@/components/ui/spinner";
 
 Chart.register(
   CategoryScale,
@@ -33,7 +34,7 @@ Chart.register(
   Title,
   Tooltip,
   Legend,
-  ArcElement,
+  ArcElement
 );
 
 interface CharComponentProps {
@@ -43,7 +44,11 @@ const ChartComponent = ({ variant }: CharComponentProps) => {
   const [position, setPosition] = useState("Yearly");
   const { data, error, isLoading, isError } = useChartData();
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-full min-h-[550px]">
+        <LoadingSpinner variant="dashboard" />
+      </div>
+    );
   }
 
   if (isError) {
@@ -61,7 +66,6 @@ const ChartComponent = ({ variant }: CharComponentProps) => {
   const weekOfMonth = Math.ceil(dayOfMonth / 7);
   const month = today.toLocaleString("default", { month: "long" }); // Full month name
   const year = today.getFullYear(); // Current year
-
   const labelForYear = `Monthly Sales for the Year ${year}`;
   const labelForMonth = `Weekly Sales for the Month of ${month}`;
   const labelForWeek = `Weekly Sales for Week ${weekOfMonth} of ${month}`;

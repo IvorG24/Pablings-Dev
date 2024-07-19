@@ -7,6 +7,7 @@ import { RootState } from "@/store/store";
 import { selectStaff } from "@/store/formSlice"; // Adjust path as needed
 import { useBarberListData } from "@/hooks/useChartData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "../ui/use-toast";
 
 const StepStaff: React.FC = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,15 @@ const StepStaff: React.FC = () => {
   const { data, isLoading, isError, error } = useBarberListData();
 
   const barberlist = useMemo(() => data?.barberlist ?? [], [data]);
+  useEffect(() => {
+    if (errors.barber) {
+      toast({
+        title: "Something went wrong",
+        description: `Barber is ${errors.barber.message}`,
+        variant: "destructive",
+      });
+    }
+  }, [errors.barber]);
 
   if (isError) {
     return <div>Error: {error?.message}</div>;
@@ -61,7 +71,6 @@ const StepStaff: React.FC = () => {
             </div>
           ))
         )}
-        {errors.staff && <span>{`${errors.staff.message}`}</span>}
       </section>
     </ScrollArea>
   );

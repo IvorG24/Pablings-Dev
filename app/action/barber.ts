@@ -63,6 +63,7 @@ export async function addBarberSchedule(formdata: FormData) {
   }
   const response = await prisma.slot.create({
     data: {
+      date: "",
       barber_name: barber,
       day_of_week: day,
       time_slot: slot,

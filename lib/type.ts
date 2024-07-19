@@ -113,3 +113,6 @@ export type AddScheduleProps = {
   barberEmail: string | null;
   barberPhone: string | null;
 };
+
+export const ADMIN_ROLE = "admin";
+export const COUNTER_ROLE = "counter";

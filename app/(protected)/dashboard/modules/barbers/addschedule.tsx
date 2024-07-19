@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -29,10 +29,20 @@ import { Barber } from "@prisma/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import AddBarber from "./addbarber";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CiCalendarDate } from "react-icons/ci";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 const AddSchedule = () => {
   const ref = useRef<HTMLFormElement>(null);
   const { barberlist, timeSlots, isLoading, isError, error } = useBarberData();
+  const [selectedDate, setSelectedDate] = useState<Date>();
   async function onSubmit(formdata: FormData) {
     try {
       const barber = formdata.get("barberName") as string;
@@ -67,8 +77,8 @@ const AddSchedule = () => {
           <AddBarber />
           {barberlist.map((barber: Barber) => (
             <Dialog key={barber.barber_id}>
-              <DialogTrigger className="w-full max-w-sm border-2 bg-stone-900 border-yellow-600 h-40 rounded-lg p-4">
-                <div className="flex gap-4  text-start h-full">
+              <DialogTrigger className="w-full max-w-sm border-2 bg-stone-900 border-yellow-600 h-40 rounded-lg p-4 hover:border-yellow-500 transition-colors">
+                <div className="flex gap-4 text-start h-full">
                   <Avatar className="border-2 w-16 h-16">
                     <AvatarImage
                       src={barber.image?.toString()}
@@ -77,9 +87,13 @@ const AddSchedule = () => {
                     <AvatarFallback>BB</AvatarFallback>
                   </Avatar>
                   <div>
-                    <h1>Barber: {barber.name}</h1>
-                    <h1>Email: {barber.email}</h1>
-                    <h1>No: {barber.phone}</h1>
+                    <h1 className="font-bold text-lg">Barber: {barber.name}</h1>
+                    <h1 className="text-sm text-gray-400">
+                      Email: {barber.email}
+                    </h1>
+                    <h1 className="text-sm text-gray-400">
+                      No: {barber.phone}
+                    </h1>
                   </div>
                 </div>
               </DialogTrigger>
@@ -87,34 +101,62 @@ const AddSchedule = () => {
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Create Barber Slot</DialogTitle>
-                  <form
-                    ref={ref}
-                    action={onSubmit}
-                    className="flex flex-col gap-6"
-                  >
-                    <Label>Barber Name</Label>
+                </DialogHeader>
+                <form
+                  ref={ref}
+                  action={onSubmit}
+                  className="flex flex-col gap-6"
+                >
+                  <div>
+                    <Label
+                      htmlFor="barberName"
+                      className="block text-sm font-medium "
+                    >
+                      Barber Name
+                    </Label>
                     <Input
                       type="text"
                       name="barberName"
+                      id="barberName"
                       value={barber.name}
                       readOnly
+                      className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500"
                     />
-                    <Label>Time Slot</Label>
-                    <Select name="slot">
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select time slot" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {timeSlots.map((slot, index) => (
-                          <SelectItem key={index} value={slot}>
-                            {slot}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Label>Day</Label>
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label>Date of Birth</label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button variant={"outline2"}>
+                          {selectedDate ? (
+                            format(selectedDate, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CiCalendarDate className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={setSelectedDate}
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="day" className="block text-sm font-medium">
+                      Day
+                    </Label>
                     <Select name="day">
-                      <SelectTrigger className="w-full">
+                      <SelectTrigger className="w-full mt-1">
                         <SelectValue placeholder="Select day of the week" />
                       </SelectTrigger>
                       <SelectContent>
@@ -125,23 +167,27 @@ const AddSchedule = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                    <div className="flex flex-col gap-6">
-                      <SubmitButton
-                        type="submit"
-                        pendingText="Creating..."
-                        className="w-full"
+                  </div>
+
+                  <div className="flex flex-col gap-6 mt-4">
+                    <SubmitButton
+                      type="submit"
+                      pendingText="Creating..."
+                      className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      Create Schedule
+                    </SubmitButton>
+                    <Separator />
+                    <Link href={`/dashboard/${barber.name}`}>
+                      <Button
+                        className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        variant="default"
                       >
-                        Create Schedule
-                      </SubmitButton>
-                      <Separator />
-                      <Link href={`/dashboard/${barber.name}`}>
-                        <Button className="w-full" variant="default">
-                          View Schedule
-                        </Button>
-                      </Link>
-                    </div>
-                  </form>
-                </DialogHeader>
+                        View Schedule
+                      </Button>
+                    </Link>
+                  </div>
+                </form>
               </DialogContent>
             </Dialog>
           ))}

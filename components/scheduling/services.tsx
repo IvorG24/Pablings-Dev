@@ -3,19 +3,19 @@ import { useFormContext } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { selectService, clearForm } from "@/store/formSlice";
 import { RootState } from "@/store/store";
-import { Input } from "../ui/input";
 import { services } from "@/lib/data";
 import { Service } from "@/lib/type";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormCard from "../ui/formcard";
+import { toast } from "../ui/use-toast";
 
 const StepService = () => {
   const dispatch = useDispatch();
   const selectedService = useSelector(
-    (state: RootState) => state.formSlice.selectedService,
+    (state: RootState) => state.formSlice.selectedService
   );
   const selectedPrice = useSelector(
-    (state: RootState) => state.formSlice.selectedPrice,
+    (state: RootState) => state.formSlice.selectedPrice
   );
   const {
     setValue,
@@ -31,6 +31,15 @@ const StepService = () => {
       setValue("price", 0);
     }
   }, [selectedService, selectedPrice, setValue]);
+  useEffect(() => {
+    if (errors.service) {
+      toast({
+        title: "Something went wrong",
+        description: `${errors.service.message}`,
+        variant: "destructive",
+      });
+    }
+  }, [errors.service]);
 
   const handleServiceSelect = (serviceName: string, price: number) => {
     dispatch(selectService({ serviceName, price }));
@@ -39,12 +48,11 @@ const StepService = () => {
   return (
     <ScrollArea className="h-[600px] rounded-md border p-4">
       <section className="flex flex-col gap-y-4">
-        {errors.service && <span>{`${errors.service.message}`}</span>}
         <h2 className="text-lg font-bold">Regular Services</h2>
         {services["Regular"].map((service: Service, index: number) => (
           <div
             key={index}
-            className={`w-full border rounded-lg h-28 p-4 ${
+            className={`w-full border rounded-lg h-auto p-4 ${
               selectedService === service.name
                 ? "border-yellow-500 bg-stone-800"
                 : ""
@@ -66,7 +74,7 @@ const StepService = () => {
           (service: Service, index: number) => (
             <div
               key={index}
-              className={`w-full border rounded-lg h-28 p-4 ${
+              className={`w-full border rounded-lg h-auto p-4 ${
                 selectedService === service.name
                   ? "border-yellow-500 bg-stone-800"
                   : ""
@@ -81,7 +89,7 @@ const StepService = () => {
                 Avatarsrc="https://github.com/shadcn.png"
               />
             </div>
-          ),
+          )
         )}
       </section>
     </ScrollArea>

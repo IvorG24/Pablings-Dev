@@ -11,6 +11,7 @@ export const authConfig: NextAuthConfig = {
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        role: { label: "Role", type: "test" },
       },
       async authorize(credentials) {
         const validatedFields = signInSchema.safeParse(credentials);
@@ -23,6 +24,7 @@ export const authConfig: NextAuthConfig = {
         const user = await prisma.user.findUnique({
           where: { email },
         });
+
         if (!user) {
           throw new Error("User not found");
         }
@@ -43,6 +45,7 @@ export const authConfig: NextAuthConfig = {
       if (user) {
         token.id = user.id;
         token.email = user.email;
+        token.role = user.role;
       }
       return token;
     },
@@ -50,6 +53,7 @@ export const authConfig: NextAuthConfig = {
       if (token) {
         session.user.id = token.id as string;
         session.user.email = token.email as string;
+        session.user.role = token.role as string;
         session.accessToken = token.accessToken as string; // Ensure accessToken is available
       }
       return session;

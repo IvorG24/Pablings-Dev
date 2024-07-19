@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/pagination";
 import useAppointmenData from "@/hooks/useAppointmenData";
 import { Appointment } from "@prisma/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface AppointmentTableProps {
   variant: "pending" | "confirmed" | "declined";
@@ -50,7 +51,24 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
   } = useAppointmenData({ variant });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col gap-5">
+        {[...Array(4)].map((_, index) => (
+          <Skeleton
+            key={index}
+            className={`h-[50px] w-full ${
+              index === 0
+                ? ""
+                : index === 1
+                  ? "lg:max-w-6xl"
+                  : index === 2
+                    ? "lg:max-w-5xl"
+                    : "lg:max-w-4xl"
+            }`}
+          />
+        ))}
+      </div>
+    );
   }
 
   if (isError) {
@@ -79,14 +97,19 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {appointmentsData.pendingAppointments.map(
+              {appointmentsData?.pendingAppointments.map(
                 (table: Appointment) => (
                   <TableRow key={table.appointment_id}>
                     <TableCell className="font-medium">
                       BK{table.BookingNumber}
                     </TableCell>
                     <TableCell>{table.service}</TableCell>
-                    <TableCell>{table.extraservices.join(", ")}</TableCell>
+                    <TableCell>
+                      {" "}
+                      {table.extraservices && table.extraservices.length > 0
+                        ? table.extraservices.join(", ")
+                        : "No extra services"}
+                    </TableCell>
                     <TableCell>{table.barber}</TableCell>
                     <TableCell>{table.date}</TableCell>
                     <TableCell>{table.time}</TableCell>
@@ -105,7 +128,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
                             onClick={() => {
                               appointmentAction(
                                 table.appointment_id,
-                                "approve",
+                                "approve"
                               );
                             }}
                           >
@@ -115,7 +138,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
                             onClick={() => {
                               appointmentAction(
                                 table.appointment_id,
-                                "decline",
+                                "decline"
                               );
                             }}
                           >
@@ -125,7 +148,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ),
+                )
               )}
             </TableBody>
           </Table>
@@ -172,14 +195,19 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {appointmentsData.confirmedAppointments.map(
+              {appointmentsData?.confirmedAppointments.map(
                 (table: Appointment) => (
                   <TableRow key={table.appointment_id}>
                     <TableCell className="font-medium">
                       BK{table.BookingNumber}
                     </TableCell>
                     <TableCell>{table.service}</TableCell>
-                    <TableCell>{table.extraservices.join(", ")}</TableCell>
+                    <TableCell>
+                      {" "}
+                      {table.extraservices && table.extraservices.length > 0
+                        ? table.extraservices.join(", ")
+                        : "No extra services"}
+                    </TableCell>
                     <TableCell>{table.barber}</TableCell>
                     <TableCell>{table.date}</TableCell>
                     <TableCell>{table.time}</TableCell>
@@ -198,7 +226,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
                             onClick={() => {
                               appointmentAction(
                                 table.appointment_id,
-                                "confirm-decline",
+                                "confirm-decline"
                               );
                             }}
                           >
@@ -208,7 +236,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                ),
+                )
               )}
             </TableBody>
           </Table>
@@ -259,7 +287,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {appointmentsData.declinedAppointments.map(
+              {appointmentsData?.declinedAppointments.map(
                 (table: Appointment) => (
                   <TableRow key={table.appointment_id}>
                     <TableCell className="font-medium">
@@ -276,7 +304,7 @@ const AppointmentTable = ({ variant }: AppointmentTableProps) => {
                     <TableCell>{table.status}</TableCell>
                     <TableCell>{table.totalprice}</TableCell>
                   </TableRow>
-                ),
+                )
               )}
             </TableBody>
           </Table>

@@ -13,7 +13,7 @@ const FormCard: React.FC<FormCardProps> = ({
 }) => {
   return (
     <>
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between h-auto items-start">
         <div className="flex gap-6 items-center">
           <Avatar>
             {Avatarsrc ? (

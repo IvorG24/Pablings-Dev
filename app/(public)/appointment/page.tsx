@@ -24,8 +24,8 @@ const page = () => {
           priority
         />
       </div>
-      <main className="p-10 min-h-[800px] h-full w-full flex gap-x-10 z-50">
-        <section className="step-indicator mb-5 pr-4 border-r-2 space-y-6">
+      <main className="p-10 min-h-[800px] h-full w-full flex flex-col lg:flex-row gap-x-10 z-50">
+        <section className="step-indicator flex items-center justify-between lg:block lg:space-y-6 mb-5 pr-4 lg:border-r-2 ">
           {stepLabels.map((label, index) => (
             <div
               key={index}
@@ -33,9 +33,14 @@ const page = () => {
                 currentStep === index ? "text-yellow-500 text-lg" : ""
               }`}
             >
-              <div className="flex items-center gap-2">
-                {<label.icon className="text-xl" />}
-                {label.label}
+              <div className="flex flex-col lg:flex-row items-center gap-2">
+                <h1
+                  className={`text-sm w-full lg:hidden mb-2 ${currentStep === index ? "text-yellow-500" : ""}`}
+                >
+                  {currentStep === index ? label.label : ""}
+                </h1>
+                {<label.icon className="text-4xl lg:text-xl" />}
+                <p className="hidden lg:block">{label.label}</p>
               </div>
             </div>
           ))}
@@ -44,11 +49,10 @@ const page = () => {
         <FormProvider {...methods}>
           <form
             ref={ref}
-            className=" w-full flex flex-col justify-between"
+            className=" w-full flex flex-col gap-y-4 justify-between"
             onSubmit={methods.handleSubmit(onSubmit)}
           >
             {steps[currentStep]}
-
             <div className="flex justify-between">
               {currentStep > 0 && (
                 <Button

@@ -10,15 +10,11 @@ import debounce from "lodash/debounce";
 const useRecordData = () => {
   const [take, setTake] = useState(15);
   const [skip, setSkip] = useState(0);
-  const [recordData, setRecordData] = useState<Sales[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
   const [searchFilter, setSearchFilter] = useState<string>("");
 
   // Define your search function
   const fetchRecords = async (filter: string) => {
     const response = await fetchRecordsList(take, skip, filter);
-    setRecordData(response.records);
-    setTotalItems(response.total);
     return response;
   };
 
@@ -32,8 +28,19 @@ const useRecordData = () => {
   const { data, error, isLoading, isError } = useQuery<RecordResponse>({
     queryKey: ["Sales", take, skip, searchFilter],
     queryFn: () => fetchRecords(searchFilter),
-    // Add `searchFilter` to the dependency array to refetch when it changes
-    enabled: !!searchFilter,
+    staleTime: 60000, // Data is fresh for 1 minute
+    gcTime: 300000, // Cache data for 5 minutes
+    refetchOnWindowFocus: false, // Do not refetch when the window is focused
+    refetchOnReconnect: false, // Do not refetch on reconnect
+    refetchOnMount: false, // Do not refetch on mount
+    enabled: true, // Always enabled to fetch data when query parameters change
+    select: (response) => {
+      // Update recordData and totalItems based on response
+      return {
+        records: response.records,
+        total: response.total,
+      };
+    },
   });
 
   // Perform the actual fetch call after debouncing
@@ -44,6 +51,10 @@ const useRecordData = () => {
       debouncedFetchRecords.cancel();
     };
   }, [searchFilter, debouncedFetchRecords]);
+
+  // Update recordData and totalItems based on the query result
+  const recordData = data?.records || [];
+  const totalItems = data?.total || 0;
 
   const totalPages: number = Math.ceil(totalItems / take);
   const handlePrevious = () => setSkip((prev) => Math.max(prev - take, 0));
@@ -64,7 +75,9 @@ const useRecordData = () => {
 
   return {
     take,
+    setTake,
     skip,
+    setSkip,
     totalPages,
     handlePrevious,
     handleNext,

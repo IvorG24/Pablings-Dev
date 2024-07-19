@@ -12,12 +12,18 @@ enum status {
   Confirm
   Declined
 } 
+
+enum role {
+  admin
+  counter
+}
 model User {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   firstname String
   lastname  String
   email     String   @unique
   password  String
+  role      role     @default(counter)
   barberId  String?  @db.ObjectId
   barber    Barber[]
   products  Product[]
@@ -45,6 +51,7 @@ model Slot {
   barber_name   String
   time_slot     String
   day_of_week   String
+  date          String
   isAvailable   Boolean  @default(true)
   @@map("slot")
 }

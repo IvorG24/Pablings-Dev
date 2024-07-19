@@ -16,7 +16,10 @@ import {
   redirect,
 } from "next/dist/client/components/redirect";
 import { SubmitButton } from "../SubmitButton";
-const MenuDrawer = () => {
+interface MenuDrawerProps {
+  role: string;
+}
+const MenuDrawer = ({ role }: MenuDrawerProps) => {
   return (
     <Sheet>
       <SheetTrigger className="block xl:hidden">
@@ -27,7 +30,9 @@ const MenuDrawer = () => {
           <SheetTitle>Menu Bar</SheetTitle>
           <div>
             <TabsList className="flex flex-col items-end gap-4 h-full w-full ">
-              {TabsContent.map(({ value, label, icon }) => (
+              {TabsContent.filter(
+                (tab) => !tab.role || tab.role.includes(role)
+              ).map(({ value, label, icon }) => (
                 <TabsTrigger
                   key={value}
                   value={value}

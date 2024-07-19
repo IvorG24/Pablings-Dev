@@ -8,11 +8,12 @@ import { extras } from "@/lib/data";
 import { Extra } from "@/lib/type"; // Assuming Extra type/interface is defined
 import { ScrollArea } from "@/components/ui/scroll-area";
 import FormCard from "../ui/formcard";
+import { toast } from "../ui/use-toast";
 
 const StepExtraServices = () => {
   const dispatch = useDispatch();
   const { selectedExtra, selectedStaff, selectedExtraPrice } = useSelector(
-    (state: RootState) => state.formSlice,
+    (state: RootState) => state.formSlice
   );
   const {
     setValue,
@@ -40,7 +41,7 @@ const StepExtraServices = () => {
         {extras.map((extra: Extra, index: number) => (
           <div
             key={index}
-            className={`w-full border rounded-lg h-28 p-4 ${
+            className={`w-full border rounded-lg h-auto p-4 ${
               selectedExtra.includes(extra.label)
                 ? "border-yellow-500 bg-stone-800"
                 : ""

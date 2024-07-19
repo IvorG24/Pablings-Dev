@@ -26,31 +26,46 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import useRecordData from "@/hooks/useRecordData";
 import AddVoucher from "./addVoucher";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const RecordTable = () => {
   const {
     take,
-    isLoading,
     searchFilter,
     setSearchFilter,
     filteredData,
     skip,
     isError,
     error,
+    isLoading,
     handlePageClick,
     handlePrevious,
     handleNext,
     totalPages,
     totalItems,
   } = useRecordData();
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col gap-5">
+        {[...Array(4)].map((_, index) => (
+          <Skeleton
+            key={index}
+            className={`h-[50px] w-full ${
+              index === 0
+                ? ""
+                : index === 1
+                  ? "lg:max-w-6xl"
+                  : index === 2
+                    ? "lg:max-w-5xl"
+                    : "lg:max-w-4xl"
+            }`}
+          />
+        ))}
+      </div>
+    );
   }
-
   if (isError) {
     return <div>Error: {error?.message}</div>;
   }
