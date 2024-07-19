@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFormContext } from "react-hook-form";
 import { format } from "date-fns";
@@ -29,7 +29,7 @@ const useStaffData = () => {
     }
   }, [dispatch, selectedDate, selectedTime]);
 
-  const handleDateSelect = (date: Date | null) => {
+  const handleDateSelect = (date: Date) => {
     if (date) {
       const formattedDate = format(date, "yyyy-MM-dd");
       setValue("date", formattedDate);
@@ -49,14 +49,19 @@ const useStaffData = () => {
     ? new Date(selectedDate).getDay()
     : undefined;
 
+  // Update filteredSlots to filter by both `day_of_week` and `date`
   const filteredSlots = useMemo(
     () =>
       barberslots.filter(
         (slot) =>
           slot.barber_name === selectedStaff &&
-          parseInt(slot.day_of_week, 10) === dayOfWeekNumber
+          parseInt(slot.day_of_week, 10) === dayOfWeekNumber &&
+          (selectedDate
+            ? new Date(slot.date).toDateString() ===
+              new Date(selectedDate).toDateString()
+            : true)
       ),
-    [barberslots, selectedStaff, dayOfWeekNumber]
+    [barberslots, selectedStaff, dayOfWeekNumber, selectedDate]
   );
 
   return {
