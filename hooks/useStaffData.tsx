@@ -29,7 +29,7 @@ const useStaffData = () => {
     }
   }, [dispatch, selectedDate, selectedTime]);
 
-  const handleDateSelect = (date: Date) => {
+  const handleDateSelect = (date: Date | undefined) => {
     if (date) {
       const formattedDate = format(date, "yyyy-MM-dd");
       setValue("date", formattedDate);
