@@ -49,18 +49,20 @@ const useStaffData = () => {
     ? new Date(selectedDate).getDay()
     : undefined;
 
-  // Update filteredSlots to filter by both `day_of_week` and `date`
   const filteredSlots = useMemo(
     () =>
-      barberslots.filter(
-        (slot) =>
+      barberslots.filter((slot) => {
+        const slotDate = new Date(slot.time_slot); // Replace with the correct property
+        const selectedDateObj = selectedDate ? new Date(selectedDate) : null;
+
+        return (
           slot.barber_name === selectedStaff &&
           parseInt(slot.day_of_week, 10) === dayOfWeekNumber &&
-          (selectedDate
-            ? new Date(slot.date).toDateString() ===
-              new Date(selectedDate).toDateString()
+          (selectedDateObj
+            ? slotDate.toDateString() === selectedDateObj.toDateString()
             : true)
-      ),
+        );
+      }),
     [barberslots, selectedStaff, dayOfWeekNumber, selectedDate]
   );
 
